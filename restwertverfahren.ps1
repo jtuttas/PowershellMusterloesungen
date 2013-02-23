@@ -9,4 +9,4 @@ do {
 	$z=$teiler
 }
 while ($teiler -gt 0)
-Write-Host ("Dual=$s")
+Write-Host ("(noch umdrehen) Dual=$s")
