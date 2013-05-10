@@ -1,0 +1,22 @@
+<rechnernetz subnet="255.255.255.0" >
+	<pc mac="23:cd:11:f1:2a:22">
+		<ip>192.168.178.2</ip>
+		<name>Fanks Desktop</name>
+	</pc>
+	<pc mac="23:cd:11:f1:2a:23">
+		<ip>192.168.178.3</ip>
+		<name>Fanks Notebook</name>
+	</pc>
+	<router mac="23:cd:11:f1:2a:24">
+		<ip>192.168.178.1</ip>
+		<name>Fritzbox</name>
+	</router>
+	<nas mac="23:cd:11:f1:2a:33">
+		<ip>192.168.178.5</ip>
+		<name>MP3 Server</name>
+	</nas>
+	<nas mac="23:cd:11:f1:2a:34">
+		<ip>192.168.178.6</ip>
+		<name>Spielfilme</name>
+	</nas>
+</rechnernetz>

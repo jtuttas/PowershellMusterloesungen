@@ -1,0 +1,10 @@
+﻿
+cls
+[xml]$a = Get-Content  ("D:\Dropbox\temp\rechnernetz.xml")
+$n = $a.SelectNodes("//pc")
+foreach ($p in $n) {
+    if ($p.name -eq "Fanks Notebook") {
+        $a.rechnernetz.RemoveChild($p)
+    }
+}
+$a.Save("D:\Dropbox\Temp\rechnernetz_neu.xml")
