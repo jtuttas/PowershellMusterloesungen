@@ -1,0 +1,26 @@
+<klasse>
+	<pupil name="Andreas" gender="male" age="22">
+		<zeugnis>
+			<fehlzeiten>
+				<gesamt>8</gesamt>
+				<entschuldigt>7</entschuldigt>
+			</fehlzeiten>
+			<lf1>2</lf1>
+			<lf2>3</lf1>
+			<lf3>2</lf1>
+			<lf4>1</lf1>
+		</zeugnis>
+	</pupil>
+	<pupil name="Nina" gender="female" age="20">
+		<zeugnis>
+			<fehlzeiten>
+				<gesamt>1</gesamt>
+				<entschuldigt>1</entschuldigt>
+			</fehlzeiten>
+			<lf1>1</lf1>
+			<lf2>2</lf1>
+			<lf3>1</lf1>
+			<lf4>2</lf1>
+		</zeugnis>
+	</pupil>
+</klasse>
