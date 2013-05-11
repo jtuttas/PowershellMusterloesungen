@@ -6,9 +6,9 @@
 				<entschuldigt>7</entschuldigt>
 			</fehlzeiten>
 			<lf1>2</lf1>
-			<lf2>3</lf1>
-			<lf3>2</lf1>
-			<lf4>1</lf1>
+			<lf2>3</lf2>
+			<lf3>2</lf3>
+			<lf4>1</lf4>
 		</zeugnis>
 	</pupil>
 	<pupil name="Nina" gender="female" age="20">
@@ -18,9 +18,9 @@
 				<entschuldigt>1</entschuldigt>
 			</fehlzeiten>
 			<lf1>1</lf1>
-			<lf2>2</lf1>
-			<lf3>1</lf1>
-			<lf4>2</lf1>
+			<lf2>2</lf2>
+			<lf3>1</lf3>
+			<lf4>2</lf4>
 		</zeugnis>
 	</pupil>
 </klasse>
