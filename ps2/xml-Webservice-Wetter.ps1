@@ -1,4 +1,5 @@
-﻿$webClient = new-object System.Net.WebClient
+﻿cls
+$webClient = new-object System.Net.WebClient
 $mmbbs = Read-Host ("Sind sie in der Schule hinter dem Proxy? j/n")
 if ($mmbbs -eq "j") {
     $proxy = new-object System.Net.WebProxy "10.20.30.55:3128" 
@@ -14,5 +15,5 @@ $webClient.Headers.Add("user-agent", "Windows Powershell WebClient Header")
 $webClient.UseDefaultCredentials = $true
 $url = 'http://weather.yahooapis.com/forecastrss?w=12833399&u=c'
 [XML]$alles = $webClient.DownloadString($url)
-$node= $alles.rss.channel.GetElementsByTagName("yweather:wind")
-Write-Host ("An der MMBBS sind es gerade "+$a[0].GetAttribute("chill")+" °C")
+$node= $alles.rss.channel.item.GetElementsByTagName("yweather:condition")
+Write-Host ("An der MMBBS sind es gerade "+$node[0].GetAttribute("temp")+" °C")
