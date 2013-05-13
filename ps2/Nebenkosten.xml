@@ -1,0 +1,14 @@
+<Nebenkosten>
+	<Haus ID="1234">
+		<Muell>1200</Muell>
+		<Wasser>3000</Wasser>
+		<Strom>500</Strom>
+		<Versicherungen>2400</Versicherungen>
+	</Haus>
+	<Haus ID="4321">
+		<Muell>3800</Muell>
+		<Wasser>8900</Wasser>
+		<Strom>1200</Strom>
+		<Versicherungen>7800</Versicherungen>
+	</Haus>
+</Nebenkosten>
