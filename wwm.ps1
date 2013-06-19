@@ -1,71 +1,58 @@
-﻿cls
-$out = "[Thema]
-Thema=1AJ`r`n" 
-$csv_file = Read-Host "CSV Datei [Tabelle.csv]"
-if ($csv_file -eq "") {
-    $csv_file="./Tabelle.csv"
-}
+﻿function StartConvert ($inFile, $outFile) {
+    $csv = Import-Csv $inFile
+    $out = "[Thema]
+Autor=Powershell`r`nThema=1AJ`r`nFragen="+($csv.length)+"`r`n`r`n"
+    for ($i=0;$i -lt $csv.length;$i++) {
 
-$csv = Get-Content $csv_file -Encoding UTF8 
-$questnum=1
-$out2=""
-foreach ($zeile in $csv) {
-    $za = $zeile.Split(",")
-    $out2= $out2+"["+$questnum+"]`r`n"
-    $out2 = $out2+"FZ1=`r`n"
-    $out2 = $out2+"FZ2="+$za[1]+"`r`n"
-    $out2 = $out2+"FZ3=`r`n"
-    $out2 = $out2+"Min="+$za[6]+"`r`n"
-    $out2 = $out2+"Max="+$za[7]+"`r`n"
-    $out2 = $out2+"Antwort_1="
-    $za[2]=$za[2].TrimStart("`"")
-    $za[2]=$za[2].TrimEnd("`"")
+        $out= $out+"["+($i+1)+"]`r`n"
+        $out = $out+"FZ1=`r`n"
+        $out = $out+"FZ2="+$csv[$i].'Die Frage'+"`r`n"
+        $out = $out+"FZ3=`r`n"
+        $out = $out+"Min="+$csv[$i].'Min'+"`r`n"
+        $out = $out+"Max="+$csv[$i].'Max'+"`r`n"
+
+        $out = $out+"Antwort_1="
+        if ($csv[$i].'Welche Antwort ist richtig?' -eq 1) {
+            $out = $out+"1"+$csv[$i].'Antwort 1'
+        }
+        else {
+            $out = $out+"0"+$csv[$i].'Antwort 1'
+        }
+        $out = $out+"`r`n"
     
-    if ($za[8] -eq 1) {
-        $out2 = $out2+"1"+$za[2]
-    }
-    else {
-        $out2 = $out2+"0"+$za[2]
-    }
-    $out2 = $out2+"`r`nAntwort_2="
-    $za[3]=$za[3].TrimStart("`"")
-    $za[3]=$za[3].TrimEnd("`"")
-    if ($za[8] -eq 2) {
-        $out2 = $out2+"1"+$za[3]
-    }
-    else {
-        $out2 = $out2+"0"+$za[3]
-    }
-    $out2 = $out2+"`r`nAntwort_3="
-    $za[4]=$za[4].TrimStart("`"")
-    $za[4]=$za[4].TrimEnd("`"")
-
-    if ($za[8] -eq 3) {
-        $out2 = $out2+"1"+$za[4]
-    }
-    else {
-        $out2 = $out2+"0"+$za[4]
-    }
-    $out2 = $out2+"`r`nAntwort_4="
-    $za[5]=$za[5].TrimStart("`"")
-    $za[5]=$za[5].TrimEnd("`"")
-
-    if ($za[8] -eq 4) {
-        $out2 = $out2+"1"+$za[5]
-    }
-    else {
-        $out2 = $out2+"0"+$za[5]
-    }
-    $out2=$out2+"`r`n`r`n"
-    $questnum++
+        $out = $out+"Antwort_2="
+        if ($csv[$i].'Welche Antwort ist richtig?' -eq 2) {
+            $out = $out+"1"+$csv[$i].'Antwort 2'
+        }
+        else {
+            $out = $out+"0"+$csv[$i].'Antwort 2'
+        }
+        $out = $out+"`r`n"
     
+        $out = $out+"Antwort_3="
+        if ($csv[$i].'Welche Antwort ist richtig?' -eq 3) {
+            $out = $out+"1"+$csv[$i].'Antwort 3'
+        }
+        else {
+            $out = $out+"0"+$csv[$i].'Antwort 3'
+        }
+        $out = $out+"`r`n"
+    
+        $out = $out+"Antwort_4="
+        if ($csv[$i].'Welche Antwort ist richtig?' -eq 4) {
+            $out = $out+"1"+$csv[$i].'Antwort 4'
+        }
+        else {
+            $out = $out+"0"+$csv[$i].'Antwort 4'
+        }
+        $out = $out+"`r`n`r`n"
+    
+    }
+
+
+
+    $out | Set-Content $outFile -Encoding String
 }
-$questnum--
-$out = $out+ "Fragen="+$questnum+"`r`n"
-$out = $out +"Autor=Powershell`r`n"
-$out_file = Read-Host "Ausgabedatei [fragen.txt]"
-if ($out_file -eq "") {
-    $out_file="fragen.txt"
-}
-$out | Set-Content $out_file -Encoding String
-$out2 | Add-Content $out_file -Encoding String
+
+#StartConvert Tabelle.csv test.txt
+
