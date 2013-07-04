@@ -1,0 +1,59 @@
+Zeitstempel,Die Frage,Antwort 1,Antwort 2,Antwort 3,Antwort 4,Min,Max,Welche Antwort ist richtig?
+13.06.2013 13:57:18,Was kostet ein Schnitzelbrötchen in der Cafeteria?,"0,50 EUR",Nix,2 EUR,"3,99 EUR",0,10000,3
+13.06.2013 13:57:38,Wie heißt der Schulleiter der MMBBS?,Jochen Reis ,Joachim Maiß,Jürgen Keis,Jan Leis,16000,125000,2
+13.06.2013 13:59:02,Welchen Dr. Titel hat der Dr. Tuttas,rer nat,phil,ing,jur,10000,64000,2
+13.06.2013 13:59:53,Wie heißt Jörg Tuttas mit Vornamen?,Jörgen,Jörg-Heinrich,Hans-Jörg,Jörg,2,16,4
+13.06.2013 14:00:08,Wie heißt der Schulleiter der MMBBS?,Jochen Reis ,Joachim Maiß,Jürgen Keis,Jan Leis,16000,125000,1
+13.06.2013 14:00:34,Wer trägt gerne Rollkragenpullover?,Marvin,Mr. Brett,Frau Asche,Frau Eink-Schütz,0,1000,3
+13.06.2013 14:00:35,"Welcher ""Tenor"" hat weltweit die meisten Platten verkauft?",Placido Domingo,Luciano Pavarotti,Andrea Bocelli,Jose Carreras,500000,1000000,3
+13.06.2013 14:00:42,Wie oft war die Politiklehrerin anwesend?,7,6,8,Welche Politiklehrerin?,500000,1000000,1
+13.06.2013 14:01:49,Welcher Lehrer trägt gerne Rollkragenpullover?,Frau Asche,Der Hausmeister,Herr Kemries,Frau Eink-Schütz,10000,25000,1
+13.06.2013 14:02:13,Wie heisst der momentane CEO von Apple? ,Bill Gates,Steve Jobs,Tim Cook,John Miller,500,8000,3
+13.06.2013 14:02:24,Wer ist Captain Terror wirklich?,Thomas,David K.,Lars,Marcus,16000,128000,4
+13.06.2013 14:03:06,welche Nummer hat der Klassenraum der Klasse FISI12F,1.28,Der Keller,Das Dach,3.08,500,1000,4
+13.06.2013 14:03:18,Wo befindet sich die MMBBS?,Erd Platz,Expo Plaza,Erdkern,Schwimmbad,0,500,2
+13.06.2013 14:03:30,"Die Filmmusik zu ""Das Boot"" schrieb ...",Henry Mancini,Steve Jablonsky,Roland Emmerich,Klaus Doldinger,500000,1000000,4
+13.06.2013 14:03:33,Was ist ein long in Powershell?,64-bit signed integer,64-bit unsigned integer,32-bit signed integer,16-bit signed integer,500000,1000000,1
+13.06.2013 14:04:06,Welche Firma hat keine Grafikkarten hergestellt,3DFX,AMD,Cyrix,nvidia,500,10000,3
+13.06.2013 14:06:28,Welche ist Herr Tuttas Lieblingsklasse,FISI12F,FISI8D,FISI13A,SYK14D,1,10,1
+13.06.2013 14:08:10,Welcher Publisher hat GTA 1 auf PC vertrieben?,Electronic Arts,BMG Interactive,Deep Silver,Take Two,100000,1000000,2
+13.06.2013 14:08:54,Wie heißt der Erfinder von Linux?,Linus Torvalds,Bill Gates,Steve Jobs,Celvin Linux,200,1000,1
+13.06.2013 14:10:19, Was wurde während des 2. Weltkriegs in Deutschland erfunden?,Snickers,Fanta,BiFi,Becks Bier,10000,500000,2
+13.06.2013 14:11:10,Welcher Lehrer macht kaum Unterricht und darf trotzdem bewerten?,Tuttas,Asche,Wittkowski,Kemmries,200,5000,3
+13.06.2013 14:12:13,Wieviele Vokale stecken insgesamt in den Vor- und Nachnamen aller Schüler unserer Klasse?,112,102,92,122,125000,1000000,1
+13.06.2013 14:12:47,Wer Trinkt jeden Tag RedBull,Thomas,Herr Tuttas,Lars,Peter,5000,64000,1
+13.06.2013 14:13:19,Welcher Publisher hat GTA 1 auf PC vertrieben?,Electronic Arts,BMG Interactive,Deep Silver,Take Two,100000,1000000,2
+13.06.2013 14:14:32,Wie lautet der Dateityp von Powershell Scripten?,.psc,.ps,.ps1 ,.ps2,0,100000,3
+13.06.2013 14:14:42,Wieviele Beiträge wurden schon in der FISI12F Gruppe bei Facebook gepostet?,458,712,356,IT'S OVER 9000!!!!,0,1000000,4
+13.06.2013 14:16:02,Am 1.Mai 1994 verunglückte ein Rennfahrer auf dem Kurs von Imola tödlich. Wer war dieser?,Ayrton Senna,Gilles Villeneuve,Jochen Rindt,Roland Ratzenberger,500000,1000000,1
+13.06.2013 14:41:39,Eine Bratsche nennt man auch ...,Violine,Geige,Viola,Cello,1000,75000,3
+13.06.2013 15:45:24,16.5cm ist das offizielle Maß für ...,den Weltrekord im Limbotanz,Die Distanz für Schneckenwettrennen,die längste Menschenzunge der Welt,die genormte Toilettenpapierbreite,500,16000,1
+13.06.2013 15:56:06,Hannover wurde im Jahr 1150 unter dem Namen Hanovere gegründet. Der Name entstammt der Übersetzung von Hanovere. Was heißt Hanovere?,ferne Heimat,tiefer Fluss,weites Land,Hohes Ufer,500,16000,4
+13.06.2013 16:18:25,Auf der Cebit 2013 wurde eine Roboterdame mit Fingerspitzengefühl vorgestellt. Wie war der Name der Roboterdame?,Irene,Aila,Susan,Maria,500,75000,2
+13.06.2013 16:21:08,Am 21. Dezember 1992 kam ein Mann aus North Carolina auf mysteriöse Weise ums Leben nachdem sein Telefon klingelte. Was war passiert?,Er bekam einen elektrischen Schlag.,Er griff versehentlich neben den Hörer.,Er erschrak sich über den Anrufer zu Tode.,Der Anrufer hypnotisierte ihn.,64000,1000000,2
+13.06.2013 16:22:13,Welche New Technology Bezeichnung (NT) entspricht Microsoft Windows 7?,5.0,5.1,6.0,6.1,1000,1250000,4
+13.06.2013 17:40:09,In welchem Bundesland wurde Bruce Willis geboren,Baden-Württemberg,Rheinland-Pfalz,Nordrhein-Westfalen,Hessen,1000,75000,2
+13.06.2013 20:01:07,Welches der folgenden Antworten bezeichnet eine Linux-Distribution?,mentOS,centOS,msdOS,armlOS,50,200,2
+13.06.2013 20:03:50,"Wenn das Wetter gut ist, wird der Bauer bestimmt den Eber, das Ferkel und...?",...einen draufmachen,...die Nacht durchzechen,...die Sau rauslassen,...auf die Kacke hauen,50,100,3
+13.06.2013 20:05:50,Was bedeutet das englische Wort become,bekommen,kriegen,erhalten,werden,50,50,4
+13.06.2013 20:12:05,Wie oft kann man einen 100 Euro Schein in Scheine wechseln?,einmal,zweimal,dreimal,viermal,50,100,1
+13.06.2013 20:13:23,7 Heuhaufen und 11 Heuhaufen werden zusammengetragen. Wie viele Heuhaufen ergibt das?,18,7,5,1,50,200,4
+13.06.2013 20:14:47,"Eine Gans läuft vor zweien, eine hinter zweien und eine zwischen zweien. Wie viele Gänse sind es?",2,3,4,5,50,500,2
+13.06.2013 20:18:20,"In einem Dorf steht ein 15-Zentner schwerer Stein, und wenn der Hahn morgens kräht, bewegt er sich. Ist das möglich?",ja,nein,wayne?!?,kommt auf die Struktur des Steins an,50,200,1
+13.06.2013 20:21:08,"Einige Monate haben 30 Tage, andere haben 31, wieviel haben 28 Tage?",einer,zwei,kommt auf das jahr an,alle,50,200,4
+13.06.2013 20:23:08,Auf einem Draht sitzen 10 Spatzen. Ein Mann schießt einen davon runter. Wie viele Spatzen bleiben auf dem Draht sitzen?,einer,neun,null,kommt auf das gewähr an,50,500,3
+13.06.2013 20:26:06,Was ist keine Rasse bei Starcraft II?,Protoss,Zeratul,Terraner,Zerg,500,2000,2
+13.06.2013 20:32:07,was ist eigentlich mit Karsten los?,Opfer deutscher Fernsehpolitik,Epileptischer Anfall,Asperger-Autist,100 Meter Freistil,50,125000,2
+13.06.2013 20:34:49,Wer war der Erfinder der Atombombe?,Julius Robert Oppenheimer,Albert Einstein,Thomas Alva Edison,Nikola Tesla,500,8000,1
+13.06.2013 20:36:12,Was war bereits seit Mai 1969 ein beliebtes Zahlungsmittel im europäischen Raum?,Euronoten,Eurocheques,Euroscheine,Euromünzen,500,2000,2
+13.06.2013 20:37:23,Malu Dreyer profitierte Anfang des Jahres von...?,...Oettingers Sattelstange,...Veltins Fahrradkette,...Diebels Vorderreifen,...Becks Rücktritt,1000,8000,4
+13.06.2013 20:38:32,Woraus besteht in der Regel eine Entourage?,Baguette & Rotwein,Mascara & Lidschatten,Freunde & Bekannte,Sofa & Sessel,2000,16000,3
+13.06.2013 20:40:04,"Was haben die Hollywood-Stars Gosling, Reynolds und Phillippe gemeinsam?",Vorname Ryan,Ex-Frau Megan Fox,Geburtsjahr 1978,irische Staatsbürgerschaft,4000,32000,1
+13.06.2013 20:43:48,Wer sollte sich mit der Zwanzig nach vier-Stellung auskennen?,Fahrlehrer,Karatemeister,Kellner,Landschaftsarchitekt,64000,250000,3
+13.06.2013 20:56:11,In welchem Ordner auf dem Tauschlaufwerk liegen wichtige Daten?,Englisch,Lernfeld 4,Lernfeld 6,Lernfeld 2,50,200,1
+14.06.2013 11:30:29,Welches Bauwerk gehört nicht zu den sieben Weltwundern?,Die große Mauer in China,Die hängenden Gärten von Babylon,Der Tempel der Artemis in Ephesos,Das Mausoleum von Halikarnassos,1000,75000,1
+14.06.2013 11:33:13,Welche dieser Farben ist im Wappen des Bundeslandes Niedersachsen,Blau,Weiß ,Grün,Orange,0,2000,2
+14.06.2013 11:35:19,Dürfen Zwerge mit dem Riesenrad fahren?,Ja,Nein,weiß nicht,Das ist eine Pfandfrage,0,500,4
+17.06.2013 18:57:31,"In ""The Big Bang Theory"" heißt eine der Hauptpersonen: Dr. Leonard ...",Hofstedter,Hofstater,Hofstadter,Hofsteter,1000,125000,3
+17.06.2013 21:59:40,"Ein Stück von der Augsburger Puppenkiste heißt ""kleiner König Kalle ...""",Wirsch,Knirsch,Mirsch,Flirsch,500,8000,1
+17.06.2013 22:01:59,"Ein stück von der Augsburger Puppenkiste heißt ""Jim Knopf und die wilde",11,12,13,14,0,5000,3
