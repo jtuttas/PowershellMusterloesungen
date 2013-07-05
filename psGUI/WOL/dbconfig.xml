@@ -1,0 +1,6 @@
+<dbconfig>
+  <dbserver>localhost</dbserver>
+  <dbname>wol</dbname>
+  <dbuser>tuttas</dbuser>
+  <dbpassword>joerg123</dbpassword>
+</dbconfig>
