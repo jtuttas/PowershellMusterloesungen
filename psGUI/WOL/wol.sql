@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50532
 File Encoding         : 65001
 
-Date: 2013-07-10 15:44:12
+Date: 2013-07-12 14:19:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -23,14 +23,15 @@ CREATE TABLE `pcs` (
   `name` varchar(255) DEFAULT NULL,
   `mac` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of pcs
 -- ----------------------------
-INSERT INTO `pcs` VALUES ('5', 'PC1', '11:11:11:11:11:11');
-INSERT INTO `pcs` VALUES ('6', 'POC2', '22:22:22:22:22:22');
-INSERT INTO `pcs` VALUES ('7', 'mein pc', '11:11:11:11:11:11');
+INSERT INTO `pcs` VALUES ('14', 'Desktop2', '11:11:11:11:11:12');
+INSERT INTO `pcs` VALUES ('15', 'Laptop1', '11:11:11:11:11:15');
+INSERT INTO `pcs` VALUES ('17', 'Desktop4', '11:11:11:11:11:17');
+INSERT INTO `pcs` VALUES ('18', 'Desktop3', '11:11:11:11:11:19');
 
 -- ----------------------------
 -- Table structure for `projects`
@@ -40,14 +41,14 @@ CREATE TABLE `projects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(80) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of projects
 -- ----------------------------
 INSERT INTO `projects` VALUES ('2', 'MMBBS');
-INSERT INTO `projects` VALUES ('14', 'Fisi12A');
-INSERT INTO `projects` VALUES ('16', 'Fisi13');
+INSERT INTO `projects` VALUES ('29', 'meinProjekt');
+INSERT INTO `projects` VALUES ('33', 'wichtigesProjekt');
 
 -- ----------------------------
 -- Table structure for `rs_pcs_projects`
@@ -61,5 +62,11 @@ CREATE TABLE `rs_pcs_projects` (
 -- ----------------------------
 -- Records of rs_pcs_projects
 -- ----------------------------
-INSERT INTO `rs_pcs_projects` VALUES ('5', '2');
-INSERT INTO `rs_pcs_projects` VALUES ('7', '14');
+INSERT INTO `rs_pcs_projects` VALUES ('15', '29');
+INSERT INTO `rs_pcs_projects` VALUES ('14', '29');
+INSERT INTO `rs_pcs_projects` VALUES ('14', '33');
+INSERT INTO `rs_pcs_projects` VALUES ('17', '33');
+INSERT INTO `rs_pcs_projects` VALUES ('15', '33');
+INSERT INTO `rs_pcs_projects` VALUES ('14', '2');
+INSERT INTO `rs_pcs_projects` VALUES ('17', '2');
+INSERT INTO `rs_pcs_projects` VALUES ('18', '2');
