@@ -1,5 +1,5 @@
 <dbconfig>
-  <dbserver>192.168.178.6</dbserver>
+  <dbserver>localhost</dbserver>
   <dbname>wol</dbname>
   <dbuser>tuttas</dbuser>
   <dbpassword>joerg123</dbpassword>

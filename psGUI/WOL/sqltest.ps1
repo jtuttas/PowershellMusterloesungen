@@ -1,9 +1,12 @@
-﻿$ok=$false
+﻿cls
+$ok=$false
 do {
     try {
-        $connString = "Server=localhost;Uid=tuttas;Pwd=joerg123;database=wol";
+        #Write-Host "Versuche DB Verbindung"
+        [xml]$dbconfig = Get-Content $PSScriptRoot"\dbconfig.xml"
+        $connString = "Server="+$dbconfig.dbconfig.dbserver+";Uid="+$dbconfig.dbconfig.dbuser+";Pwd="+$dbconfig.dbconfig.dbpassword+";database="+$dbconfig.dbconfig.dbname;
         # load MySQL driver and query database
-        [void][system.reflection.Assembly]::LoadFrom("MySQL.Data.dll");
+        [void][system.reflection.Assembly]::LoadFrom($PSScriptRoot+"\mysql.data.dll");
         $conn = New-Object MySql.Data.MySqlClient.MySqlConnection;
         $conn.ConnectionString = $connString;
         $conn.Open();
