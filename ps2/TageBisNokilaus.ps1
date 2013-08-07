@@ -5,3 +5,4 @@ $today = Get-Date
 $nikolausTag=$nikolaus.get_DayOfYear()
 $todayTag=$today.get_DayOfYear()
 Write-Host ("Es sind noch "+($nikolausTag-$todayTag)+" Tage bis Nikolaus")
+#test
