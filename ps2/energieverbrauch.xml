@@ -1,0 +1,20 @@
+<messung zeit="635152673187320189">
+  <rechner>
+    <ip>192.168.178.1</ip>
+    <name>FritzBox</name>
+    <leistung>10</leistung>
+    <arbeit>0</arbeit>
+  </rechner>
+  <rechner>
+    <ip>192.168.178.20</ip>
+    <name>Desktop</name>
+    <leistung>300</leistung>
+    <arbeit>0</arbeit>
+  </rechner>
+  <rechner>
+    <ip>127.0.0.1</ip>
+    <name>Notebook</name>
+    <leistung>50</leistung>
+    <arbeit>0.02665278</arbeit>
+  </rechner>
+</messung>
