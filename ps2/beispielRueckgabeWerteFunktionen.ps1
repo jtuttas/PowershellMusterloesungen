@@ -23,4 +23,4 @@ Write-host "I got more: $Igot"
 
 #Gespeichert werden alle Rückgabewerte in einem Array:
 $Igot[0]
-$Igot[1]
+$Igot[1] 
