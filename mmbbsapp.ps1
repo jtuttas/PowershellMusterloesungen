@@ -45,7 +45,7 @@ foreach ($zeile in $html) {
             $line=$html[18]
             $lehrer="NN"
             if ($html[18].Length -gt 7) {
-                $lehrer=$line.Substring(6,2);
+                $lehrer=$line.Substring(6);
             }
             $klehrer.Add($klasse,$lehrer)
             $i++
