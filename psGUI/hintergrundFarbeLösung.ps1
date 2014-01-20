@@ -11,5 +11,5 @@ do {
   
 }
 while ($a -ne "q")
-
+ 
 $myF.Close()
