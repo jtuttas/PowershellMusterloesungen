@@ -40,7 +40,7 @@ cls
 $msg=""
 $s = Get-Service | where {$_.Status -eq "running"}
 if (Test-Path "~\services.xml") {
-    [xml]$x=Get-Content ~\services.xml
+    [xml]$x=Get-Content "~\services.xml"
     $d=New-Object System.DateTime($x.services.timestamp)
     Write-Host "Letzte Messung am $d"
     foreach ($service in $x.services.ChildNodes) {
