@@ -1,4 +1,5 @@
 ﻿# Auf dem Remote Computer muss die POwershell als Admin ausgeführt werden und Enable-PSRemoting aktiviert werden!
+# Die Firewall muss für WMI durchgängig sein und der RPC Dienst muss auf dem zugegriffenen Computer laufen
 
 param (
     $computer="localhost",

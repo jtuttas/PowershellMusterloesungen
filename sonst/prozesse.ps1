@@ -19,7 +19,7 @@ function GetMailConfig() {
     $pw=$c.Password | ConvertFrom-SecureString
     $e.innerText=$pw
     $global:config.firstChild.AppendChild($e)
-    $global:config.Save("MailConfig.xml")
+    $global:config.Save($HOME+"\MailConfig.xml")
 }
 
 function createXML() {
@@ -33,13 +33,13 @@ function createXML() {
         $e.InnerText=$service.Name
         $l=$x.firstChild.AppendChild($e)
     }
-    $x.Save("services.xml")
+    $x.Save($HOME+"\services.xml")
 }
 
 cls
 $msg=""
 $s = Get-Service | where {$_.Status -eq "running"}
-if (Test-Path "~\services.xml") {
+if (Test-Path ($HOME+"\services.xml")) {
     [xml]$x=Get-Content "~\services.xml"
     $d=New-Object System.DateTime($x.services.timestamp)
     Write-Host "Letzte Messung am $d"
