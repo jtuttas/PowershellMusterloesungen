@@ -2,7 +2,7 @@
     [int]$dt,
     [int]$count
 )
-#test
+
 function cpu-load {
     $p = Get-WmiObject win32_processor
     $load = 'load' | Select-Object -Property Timestamp, Load
