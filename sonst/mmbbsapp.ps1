@@ -118,7 +118,7 @@ foreach ($zeile in $html) {
             $html = $html.Content
             $html = $html.Split("`r`n");
             $lehrer=$html[15]
-            Write-Host  ("Lese Kürzel $teacher ist $lehrer'n");
+            Write-Host  ("Lese Kürzel $teacher ist $lehrer");
             $kuerzel.Add($i,$lehrer)
             $i++
         }   
@@ -210,6 +210,13 @@ try {
     }
 
 
+    $command = New-Object MySql.Data.MySqlClient.MySqlCommand;
+    $command.Connection = $conn;
+
+
+    $command.CommandText="INSERT INTO version (timestamp) VALUES (now());"
+    Write-Output $command.CommandText
+    $reader = $command.ExecuteNonQuery();
     $conn.Close();
 }
 catch {
