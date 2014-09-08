@@ -102,6 +102,7 @@ foreach ($zeile in $html) {
         $zeile=$zeile.TrimEnd("];")
         $zeile=$zeile.Split(",")
         $i=1
+        $zeile;
         foreach ($teacher in $zeile) {
                     
             $teacher = $teacher.Substring(1,$teacher.length-2)
@@ -125,6 +126,7 @@ foreach ($zeile in $html) {
         break;
     }
 }
+#exit;
 
 #$kuerzel
 Write-Host ("Lese Vertretungsplan Lehrer")
@@ -181,8 +183,13 @@ try {
         $command = New-Object MySql.Data.MySqlClient.MySqlCommand;
         $command.Connection = $conn;
 
-
-        $command.CommandText="INSERT INTO KLASSE (KNAME,STUNDENPLAN,VERTRETUNGSPLAN,ID_LEHRER) VALUES ('"+$objekt.Klasse+"',"+$objekt.IDPlan+","+$objekt.IDVPlan+",'"+$objekt.IDLEHRER+"') ON DUPLICATE KEY UPDATE STUNDENPLAN = "+$objekt.IDPlan+",VERTRETUNGSPLAN="+$objekt.IDVPlan+",ID_LEHRER='"+$objekt.IDLEHRER+"'"
+        if ($objekt.IDVPlan -ne $null) {
+            $command.CommandText="INSERT INTO KLASSE (KNAME,STUNDENPLAN,VERTRETUNGSPLAN,ID_LEHRER) VALUES ('"+$objekt.Klasse+"',"+$objekt.IDPlan+","+$objekt.IDVPlan+",'"+$objekt.IDLEHRER+"') ON DUPLICATE KEY UPDATE STUNDENPLAN = "+$objekt.IDPlan+",VERTRETUNGSPLAN="+$objekt.IDVPlan+",ID_LEHRER='"+$objekt.IDLEHRER+"'"
+        }
+        else {
+            $command.CommandText="INSERT INTO KLASSE (KNAME,STUNDENPLAN,ID_LEHRER) VALUES ('"+$objekt.Klasse+"',"+$objekt.IDPlan+",'"+$objekt.IDLEHRER+"') ON DUPLICATE KEY UPDATE STUNDENPLAN = "+$objekt.IDPlan+",ID_LEHRER='"+$objekt.IDLEHRER+"'"
+        }
+        #$objekt
         Write-Output $command.CommandText
         $reader = $command.ExecuteNonQuery();
     
@@ -237,5 +244,6 @@ $resultArray=$resultArray | sort { $_.Klasse}
 $resultArray
 }
 
-$kw=get-date -uFormat %V
-gen($kw)
+[int]$kw=get-date -uFormat %V
+$kw++
+gen $kw
