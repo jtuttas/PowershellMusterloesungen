@@ -145,13 +145,14 @@ foreach ($zeile in $html) {
 
         foreach ($klasse in $zeile) {               
             $klasse = $klasse.Substring(1,$klasse.length-2)                
-            $lvplan.Add($i,$klasse)            
+            $lvplan.Add($klasse,$i)   
+
+            $klasse         
             $i++
         }   
         break
     }
 }
-
 Write-Host ("Schreiben in die Datenbank")
 # the connection string used to connect to the database
 $connString = "Server="+$dbserver+";Uid="+$dbuser+";Pwd="+$dbpassword+";database="+$dbname;
@@ -199,10 +200,8 @@ try {
         $lobjekt = 'dummy' | Select-Object -Property Kuerzel, IDPlan, IDVPlan, Name
         $lobjekt.Kuerzel=$kuerzel[$key]
         $lobjekt.IDPlan=$key
-        $lobjekt.IDVPlan=$key
         $lobjekt.Name=$lstdPlan[$key]
-
-        
+        $lobjekt.IDVPlan=$lvplan[$lobjekt.Name]
 
 
         $command = New-Object MySql.Data.MySqlClient.MySqlCommand;
