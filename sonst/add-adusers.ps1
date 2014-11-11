@@ -63,14 +63,19 @@ function add-ADUsers
                     # Neuen Benutzer Anlegen
                     try {
                         $pw = ConvertTo-SecureString -AsPlainText $pwdtxt  -Force
-                        New-ADUser -Name $row.Lastname -surname $row.Firstname -GivenName $row.lastname -UserPrincipalName $row.lastname -Enabled $true -AccountPassword $pw
-                        # Neuen Benutzer in die Gruppe eintragen
-                        Add-ADGroupMember -Identity $row.group -Members $row.lastname
-                        Write-Host "Benutzer "($row.lastname)" angelegt und zur Gruppe "($row.group)" zugeordnet" -ForegroundColor Green
-                
+                        New-ADUser -Name $row.Lastname -surname $row.Firstname -GivenName $row.lastname -UserPrincipalName $row.lastname -Enabled $true -AccountPassword $pw                
                     }
                     catch {
                         Write-Host "Benutzer "($row.lastname)" konnte nicht angelegt werden" -ForegroundColor Red
+                    }
+                    try {
+                        # Neuen Benutzer in die Gruppe eintragen
+                        Add-ADGroupMember -Identity $row.group -Members $row.lastname
+                        Write-Host "Benutzer "($row.lastname)" zur Gruppe "($row.group)" zugeordnet" -ForegroundColor Green
+
+                    }
+                    catch {
+                        Write-Host "Benutzer "($row.lastname)" konnte nicht zur Gruppe "($row.group)" zugeordnet werden" -ForegroundColor Red
                     }
                 }
             }
