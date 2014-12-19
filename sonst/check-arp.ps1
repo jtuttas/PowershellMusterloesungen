@@ -10,12 +10,12 @@ function check-arp
 {
     Param
     (
-        # Hilfebeschreibung zu Param1
+        # IP Adresse des GateWays
         [Parameter(Mandatory=$true,
                    Position=0)]
         $ipAdress,
 
-        # Hilfebeschreibung zu Param2
+        # MAC Adresse des Gateways
         [Parameter(Mandatory=$true,
                    Position=1)]
         $macAdress
