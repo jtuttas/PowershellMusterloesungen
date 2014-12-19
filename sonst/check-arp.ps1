@@ -18,30 +18,36 @@ function check-arp
         # MAC Adresse des Gateways
         [Parameter(Mandatory=$true,
                    Position=1)]
-        $macAdress
+        $macAdress,
+
+        # Eigene IP Adresse des Interfaces
+        [Parameter(Position=2)]
+        $ownIp
+
     )
 
     while ($true) {
-        $arp= arp -a 
-        $hmac = @{};
-        foreach ($line in $arp) {
-            $s=$line.split(" ")
-            $ip=$null
-            $mac=$null
-            foreach ($element in $s) {
-                if ($element.indexof(".") -ne -1) {
-                    $ip=$element
-                }
-                if ($element.indexof("-") -ne -1) {
-                    $mac=$element
-                }
+        if ($ownIp.lenfth -ne 0) {
+            $arp= arp -a $ipAdress -N $ownIp  
+        }
+        else {
+            $arp= arp -a $ipAdress  
+        }
+        
+        $s=$arp.split(" ")
+        $ip=$null
+        $mac=$null
+        foreach ($element in $s) {
+            if ($element.indexof(".") -ne -1) {
+                $ip=$element
             }
-            if ($ip -ne $null -and $mac -ne $null) {
-                $hmac[$ip]=$mac
+            if ($element.indexof("-") -ne -1) {
+                $mac=$element
             }
         }
-        if ($hmac[$ipAdress] -ne $macAdress) {
-            Write-Host "Achtung Angriff von MAC "$hmac[$ipAdress] -BackgroundColor Red -ForegroundColor White
+        if ($mac -ne $macAdress) {
+            $evilIp = arp -a | select-string $mac |% { $_.ToString().Trim().Split(" ")[0] }            
+            Write-Host "Achtung Angriff von MAC "$mac" mit ip "($evilIp[1]) -BackgroundColor Red -ForegroundColor White
         }
         else {
             Write-Host "Alles OK" -BackgroundColor Green -ForegroundColor White
