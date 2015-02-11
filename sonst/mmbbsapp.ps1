@@ -245,4 +245,9 @@ $resultArray
 
 [int]$kw=get-date -uFormat %V
 $kw++
-gen $kw
+[String]$kws=$kw
+if ($kw -le 9) {
+$kws="0$kw"
+
+}
+gen $kws
