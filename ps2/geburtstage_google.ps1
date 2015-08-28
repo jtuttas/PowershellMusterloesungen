@@ -1,5 +1,5 @@
 ﻿cls
-$d = Get-Content .\Geburtstage.csv
+$d = Get-Content .\LEHRER_GEBTAG.csv
 $filename = "geburtstage.ics"
 "" | Set-Content $filename
 $idcount=1;
@@ -34,6 +34,6 @@ foreach ($zeile in $d) {
     "RRULE:FREQ=YEARLY"| Add-Content $filename
     "END:VEVENT"| Add-Content $filename
     $idcount++
-    Write-Host ("Einttrag für "+$daten[3]+" "+$daten[2]+" erzeugt")
+    Write-Host ("Eintrag für "+$daten[3]+" "+$daten[2]+" erzeugt")
 }
 "END:VCALENDAR" | Add-Content $filename

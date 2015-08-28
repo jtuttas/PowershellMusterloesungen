@@ -209,7 +209,13 @@ try {
 
 
         #$command.CommandText = "UPDATE KLASSE SET STUNDENPLAN=$idStdplan,VERTRETUNGSPLAN=$idVplan,ID_LEHRER=`"$idLehrer`" WHERE KNAME=`"$key`";"
-        $command.CommandText="INSERT INTO LEHRER (ID,NNAME,STUNDENPLAN,VERTRETUNGSPLAN) VALUES ('"+$lobjekt.Kuerzel+"','"+$lobjekt.Name+"',"+$lobjekt.IDPlan+","+$lobjekt.IDVPlan+") ON DUPLICATE KEY UPDATE STUNDENPLAN = "+$lobjekt.IDPlan+",VERTRETUNGSPLAN="+$lobjekt.IDVPlan
+        if ($lobjekt.IDVPlan -ne $null) {
+            $command.CommandText="INSERT INTO LEHRER (ID,NNAME,STUNDENPLAN,VERTRETUNGSPLAN) VALUES ('"+$lobjekt.Kuerzel+"','"+$lobjekt.Name+"',"+$lobjekt.IDPlan+","+$lobjekt.IDVPlan+") ON DUPLICATE KEY UPDATE STUNDENPLAN = "+$lobjekt.IDPlan+",VERTRETUNGSPLAN="+$lobjekt.IDVPlan
+        }
+        else {
+            $command.CommandText="INSERT INTO LEHRER (ID,NNAME,STUNDENPLAN) VALUES ('"+$lobjekt.Kuerzel+"','"+$lobjekt.Name+"',"+$lobjekt.IDPlan+") ON DUPLICATE KEY UPDATE STUNDENPLAN = "+$lobjekt.IDPlan
+
+        }
         Write-Output $command.CommandText
         $reader = $command.ExecuteNonQuery();
     
