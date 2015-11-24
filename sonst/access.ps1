@@ -1,3 +1,4 @@
+# DB Pfad zur Access Datenbak
 $path = "E:\Dokumente\Datenbank1.accdb"
 $adOpenStatic = 3
 $adLockOptimistic = 3
