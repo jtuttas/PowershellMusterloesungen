@@ -158,7 +158,7 @@ function switch-block
             }
             }
         catch {                
-            Write-Host "Fehler beim Switchen des Blockes von $fromblock nach $toblock für die VM $vmname : $_" -BackgroundColor red
+            Write-Host "Fehler beim Switchen des Blockes von $fromblock nach $toblock für die VM "$vmname.VM": $_" -BackgroundColor red
         }            
                    
     }
