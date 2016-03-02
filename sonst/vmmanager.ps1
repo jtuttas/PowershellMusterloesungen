@@ -79,7 +79,7 @@ function create-block
             try {
                 $sn = Get-VMSnapshot -VMName $vmname.VM -Name $block -ErrorAction SilentlyContinue
                 if ($sn) {
-                    Write-Host "Fehler beim Erzeugen des Block $block für die VM $vmname : Der block existiert schon!" -BackgroundColor red
+                    Write-Host "Fehler beim Erzeugen des Block $block für die VM"$vmname.VM": Der Block existiert schon!" -BackgroundColor red
                 }
                 else {
                     Write-Host "aktiviere Snapshot 'base' für "$vmname.VM
