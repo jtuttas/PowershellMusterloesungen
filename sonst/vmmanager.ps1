@@ -5,8 +5,7 @@
    Löscht alle Snapshorts und erstellt einen Snapshot "base" 
 .EXAMPLE
    init-block -vmname "linux"
-.EXAMPLE
-   Ein weiteres Beispiel für die Verwendung dieses Cmdlets
+
 #>
 function init-block
 {
@@ -22,28 +21,32 @@ function init-block
 
     Begin
     {
-            Remove-VMSnapshot -VMName $vmname 
-            Write-Host "Löschen Snapshots für $vmname"
+        try {
+        Write-Host "Löschen Snapshots für $vmname"
+        Remove-VMSnapshot -VMName $vmname -ErrorAction Stop -ErrorVariable $e
+        Write-Host "Erstelle base Snapshot"
+        Checkpoint-VM -Name $vmname -SnapshotName 'base' -ErrorAction Stop
+        }
+        catch {
+            Write-Host "Fehler beim initialisieren des VM $vmname : $_" -BackgroundColor red
+        }
     }
     Process
     {
     }
     End
     {
-        Write-Host "Erstelle base Snapshot"
-        Checkpoint-VM -Name $vmname -SnapshotName 'base'
     }
 }
 
 <#
 .Synopsis
-   erstellt einen Snapshot unter base
+   Erstellt einen Snapshot unter base mit dem namen block
 .DESCRIPTION
-   erstellt einen Snapshot unter base
+   Erstellt einen Snapshot unter base mit dem namen block
 .EXAMPLE
-   create-block -vmname "linux" -blockname
-.EXAMPLE
-   Ein weiteres Beispiel für die Verwendung dieses Cmdlets
+   create-block -vmname "linux" -block "rot"
+
 #>
 function create-block
 {
@@ -62,16 +65,21 @@ function create-block
 
     Begin
     {
-            Restore-VMSnapshot -VMName $vmname -Name 'base' –confirm:$False
+        try {
             Write-Host "aktiviere Snapshot 'base' für $vmname"
+            Restore-VMSnapshot -VMName $vmname -Name 'base' –confirm:$False -ErrorAction Stop
+            Write-Host "Erstelle Snapshot $block"
+            Checkpoint-VM -Name $vmname -SnapshotName $block -ErrorAction Stop
+         }
+         catch {         
+            Write-Host "Fehler beim Erzeugen des Block $block für die VM $vmname : $_" -BackgroundColor red
+         }
     }
     Process
     {
     }
     End
     {
-        Write-Host "Erstelle Snapshot $block"
-        Checkpoint-VM -Name $vmname -SnapshotName $block 
     }
 }
 
@@ -81,9 +89,9 @@ function create-block
 .DESCRIPTION
    Schaltet zwischen zwei Snapshots um
 .EXAMPLE
+    Schaltet die VM "linux" zwischen den Blöcken "rot" und "gelb" um!
    switch-block -vmname "linux" -fromblock "rot" -toblock "gelb"
-.EXAMPLE
-   Ein weiteres Beispiel für die Verwendung dieses Cmdlets
+
 #>
 function switch-block
 {
@@ -104,18 +112,24 @@ function switch-block
 
     Begin
     {
+        try {
+            $sn = Get-VMSnapshot -VMName $vmname -Name $fromblock -ErrorAction Stop             
             Write-Host "Lösche Snapshot '$fromblock' für $vmname (Merge)"
-            Remove-VMSnapshot -VMName $vmname -Name $fromblock
+            Remove-VMSnapshot -VMName $vmname -Name $fromblock -ErrorAction Stop
             Write-Host "Erstelle Snapshot '$fromblock' für $vmname (Merge)"
-            Checkpoint-VM -Name $vmname -SnapshotName $fromblock 
-            
+            Checkpoint-VM -Name $vmname -SnapshotName $fromblock  -ErrorAction Stop
+            Write-Host "Aktiviere Snapshot $toblock für $vmname"
+            Restore-VMSnapshot -VMName $vmname -Name $toblock –confirm:$False -ErrorAction Stop
+            }
+            catch {                
+                Write-Host "Fehler beim Switchen des Blockes von $fromblock nach $toblock für die VM $vmname : $_" -BackgroundColor red
+            }
     }
     Process
     {
     }
     End
     {
-        Write-Host "Aktiviere Snapshot $toblock für $vmname"
-         Restore-VMSnapshot -VMName $vmname -Name $toblock –confirm:$False
+       
     }
 }
