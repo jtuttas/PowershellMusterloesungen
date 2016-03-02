@@ -4,8 +4,11 @@
 .DESCRIPTION
    Löscht alle Snapshorts und erstellt einen Snapshot "base" 
 .EXAMPLE
+   Init Block for the named VM
    init-block -vmname "linux"
-
+.EXAMPLE
+   Init Block for a List of VM's
+   Import-Csv C:\Users\jtutt_000\Temp\test.csv | init-block 
 #>
 function init-block
 {
@@ -51,6 +54,9 @@ function init-block
    Erstellt einen Snapshot unter base mit dem namen block
 .EXAMPLE
    create-block -vmname "linux" -block "rot"
+.EXAMPLE
+   Create Block for a List of VM's
+   Import-Csv C:\Users\jtutt_000\Temp\test.csv | create-block -block "rot"
 
 #>
 function create-block
@@ -106,6 +112,9 @@ function create-block
 .EXAMPLE
     Schaltet die VM "linux" zwischen den Blöcken "rot" und "gelb" um!
    switch-block -vmname "linux" -fromblock "rot" -toblock "gelb"
+.EXAMPLE
+   Switch Blocks for a List of VM's
+   Import-Csv C:\Users\jtutt_000\Temp\test.csv | switch-block -fromblock "rot" -toblock "gelb"
 
 #>
 function switch-block
