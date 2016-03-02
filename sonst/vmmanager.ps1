@@ -113,13 +113,19 @@ function switch-block
     Begin
     {
         try {
-            $sn = Get-VMSnapshot -VMName $vmname -Name $fromblock -ErrorAction Stop             
-            Write-Host "Lösche Snapshot '$fromblock' für $vmname (Merge)"
-            Remove-VMSnapshot -VMName $vmname -Name $fromblock -ErrorAction Stop
-            Write-Host "Erstelle Snapshot '$fromblock' für $vmname (Merge)"
-            Checkpoint-VM -Name $vmname -SnapshotName $fromblock  -ErrorAction Stop
-            Write-Host "Aktiviere Snapshot $toblock für $vmname"
-            Restore-VMSnapshot -VMName $vmname -Name $toblock –confirm:$False -ErrorAction Stop
+            $sn = Get-VMSnapshot -VMName $vmname -Name $fromblock -ErrorAction Stop            
+            $machine = Get-VM -Name $vmname
+            if ($machine.ParentCheckpointName -ne $fromblock) {
+                Write-Host "$fromblock is not the current block! Current block is"$machine.ParentCheckpointName -BackgroundColor Red
+            }
+            else {
+                Write-Host "Lösche Snapshot '$fromblock' für $vmname (Merge)"
+                Remove-VMSnapshot -VMName $vmname -Name $fromblock -ErrorAction Stop
+                Write-Host "Erstelle Snapshot '$fromblock' für $vmname (Merge)"
+                Checkpoint-VM -Name $vmname -SnapshotName $fromblock  -ErrorAction Stop 
+                Write-Host "Aktiviere Snapshot $toblock für $vmname"
+                Restore-VMSnapshot -VMName $vmname -Name $toblock –confirm:$False -ErrorAction Stop
+            }
             }
             catch {                
                 Write-Host "Fehler beim Switchen des Blockes von $fromblock nach $toblock für die VM $vmname : $_" -BackgroundColor red
