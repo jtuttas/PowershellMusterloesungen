@@ -27,7 +27,7 @@ function init-block
     }
     Process
     {
-        foreach ($vm in $vmname) {
+       
              try {
                 Write-Host "Löschen Snapshots für "$vmname.VM 
                 Remove-VMSnapshot -VMName $vmname.VM -ErrorAction Stop -ErrorVariable $e
@@ -37,7 +37,7 @@ function init-block
             catch {
                 Write-Host "Fehler beim initialisieren des VM $vmname : $_" -BackgroundColor red
             }
-        }
+      
     }
     End
     {
@@ -75,17 +75,23 @@ function create-block
     }
     Process
     {
-        foreach ($vm in $vmname) {
+       
             try {
-                Write-Host "aktiviere Snapshot 'base' für "$vmname.VM
-                Restore-VMSnapshot -VMName $vmname.VM -Name 'base' –confirm:$False -ErrorAction Stop
-                Write-Host "Erstelle Snapshot $block"
-                Checkpoint-VM -Name $vmname.VM -SnapshotName $block -ErrorAction Stop
+                $sn = Get-VMSnapshot -VMName $vmname.VM -Name $block -ErrorAction SilentlyContinue
+                if ($sn) {
+                    Write-Host "Fehler beim Erzeugen des Block $block für die VM $vmname : Der block existiert schon!" -BackgroundColor red
+                }
+                else {
+                    Write-Host "aktiviere Snapshot 'base' für "$vmname.VM
+                    Restore-VMSnapshot -VMName $vmname.VM -Name 'base' –confirm:$False -ErrorAction Stop
+                    Write-Host "Erstelle Snapshot $block"
+                    Checkpoint-VM -Name $vmname.VM -SnapshotName $block -ErrorAction Stop
+                }
              }
              catch {         
                 Write-Host "Fehler beim Erzeugen des Block $block für die VM $vmname : $_" -BackgroundColor red
              }
-        }
+       
     }
     End
     {
@@ -126,8 +132,8 @@ function switch-block
     }
     Process
     {
-        foreach ($vm in $vmname) {
-                try {
+       
+        try {
             $sn = Get-VMSnapshot -VMName $vmname.VM -Name $fromblock -ErrorAction Stop            
             $machine = Get-VM -Name $vmname.VM
             if ($machine.ParentCheckpointName -ne $fromblock) {
@@ -142,10 +148,10 @@ function switch-block
                 Restore-VMSnapshot -VMName $vmname.VM -Name $toblock –confirm:$False -ErrorAction Stop
             }
             }
-            catch {                
-                Write-Host "Fehler beim Switchen des Blockes von $fromblock nach $toblock für die VM $vmname : $_" -BackgroundColor red
-            }            
-         }            
+        catch {                
+            Write-Host "Fehler beim Switchen des Blockes von $fromblock nach $toblock für die VM $vmname : $_" -BackgroundColor red
+        }            
+                   
     }
     End
     {
