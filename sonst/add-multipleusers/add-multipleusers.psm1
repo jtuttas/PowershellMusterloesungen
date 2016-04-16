@@ -2,8 +2,11 @@
 .Synopsis
    Anlegen von AD Benutzern 
 .DESCRIPTION
-   Dieses Script legt Benutzer in einer AD an, als Datenquelle dient eine CSV Datei mit folgenden Einträgen
-   Fistname,LastName, Password
+   Dieses Script legt Benutzer in einer AD an, als Datenquelle dient eine CSV Datei mit folgenden Eintraegen
+
+   Homedrive,Homedirectory,Path,Firstname,Lastname,Password
+   "F:","\\MMBBS-DATA1\Home\IT-15","OU=FISI15Z,OU=IT-15,OU=IT,OU=Schüler,DC=mmbbs,DC=local","Jörg","Tuttas4","Tuttas1!!!"
+
 .EXAMPLE
    Add-ADUsers -tablename users.csv
 .EXAMPLE
@@ -73,3 +76,4 @@ function add-ADUsers
     }
 }
 
+Export-ModuleMember -Function add-ADUsers
