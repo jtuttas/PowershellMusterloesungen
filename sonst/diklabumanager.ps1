@@ -112,7 +112,8 @@ function get-pupil
    add-pupil -auth_token agfdasfdg -vname Joerg -nname Tuttas -geb 1968-04-11 -uri http://localhost:8080/Diklabu/api/v1/
 .EXAMPLE
    add-pupil -auth_token agfdasfdg -vname Jörg -nname Tuttas -geb 1968-04-11 -email jtuttas@gmx.net -uri http://localhost:8080/Diklabu/api/v1/
-
+.EXAMPLE
+   add-pupil -auth_token agfdasfdg -vname Joerg -nname Tuttas -geb 1968-04-11 -uri http://localhost:8080/Diklabu/api/v1/ -idausbilder=4711
 #>
 function add-pupil
 {
@@ -265,9 +266,9 @@ function addto-course
 
 <#
 .Synopsis
-   Eine Klasse hinzufügen
+   Eine Klasse hinzufügen oder aktualisieren
 .DESCRIPTION
-   Fügt eine Klasse der Tabelle Klasse hinzu
+   Fügt eine Klasse der Tabelle Klasse hinzu oder aktualisiert die Attribute
 .EXAMPLE
    add-course -auth_token agfdasfdg -kname FISI13A 
 .EXAMPLE
@@ -276,6 +277,10 @@ function addto-course
    add-course -auth_token agfdasfdg -kname FISI13A -uri http://localhost:8080/Diklabu/api/v1/ -titel Eine Klasse
 .EXAMPLE
    add-course -auth_token agfdasfdg -kname FISI13A -uri http://localhost:8080/Diklabu/api/v1/ -idlehrer TU
+.EXAMPLE
+   add-course -auth_token agfdasfdg -kname FISI13A -uri http://localhost:8080/Diklabu/api/v1/ -idkategorie 17
+.EXAMPLE
+   add-course -auth_token agfdasfdg -kname FISI13A -uri http://localhost:8080/Diklabu/api/v1/ -termine Block_blau
 #>
 function add-course
 {
@@ -300,17 +305,25 @@ function add-course
         $titel,
 
         # Notiz zur Klasse
-        $notiz
+        $notiz,
+
+        # Termine
+        $termine,
+
+        # ID_Kategorie
+        $idkategorie
 
     )
 
     Begin
     {
-        $klasse=echo "" | Select-Object -Property "ID_LEHRER","KNAME","TITEL","NOTIZ"
+        $klasse=echo "" | Select-Object -Property "ID_LEHRER","KNAME","TITEL","NOTIZ","TERMINE","ID_KATEGORIE"
         $klasse.ID_LEHRER=$idlehrer
         $klasse.KNAME=$kname
         $klasse.TITEL=$titel
         $klasse.NOTIZ=$notiz
+        $klasse.TERMINE=$termine
+        $klasse.ID_KATEGORIE=$idkategorie
         $headers=@{}
         $headers["content-Type"]="application/json;charset=iso-8859-1"
         $headers["auth_token"]=$auth_token;
