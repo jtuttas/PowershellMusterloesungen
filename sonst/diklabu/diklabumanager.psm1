@@ -119,7 +119,3 @@ function Login-Diklabu
     }
 }
 
-#Export-ModuleMember -Function Set-Diklabuserver
-#Export-ModuleMember -Function Get-Diklabuserver
-#Export-ModuleMember -Function Login-Diklabu
-
