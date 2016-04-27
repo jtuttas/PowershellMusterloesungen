@@ -19,6 +19,14 @@
 $global:server="http://localhost:8080/Diklabu/api/v1/"
 $global:auth_token="1234"
 
+if (Test-Path "$home\diklabu.conf") {
+    [xml]$d=Get-Content "$home\diklabu.conf";
+    $global:server=$d.diklabu.server;
+}
+else {
+    "<diklabu><server>"+$global:server+"</server></diklabu>" | Set-Content "$home\diklabu.conf"
+}
+
 <#
 .Synopsis
    Server URL Setzen
@@ -33,20 +41,17 @@ function Set-Diklabuserver
     (
         # Hilfebeschreibung zu Param1
         [Parameter(Mandatory=$true,Position=0)]
-        $uri
+        [String]$uri
 
     )
 
     Begin
     {
         $global:server=$uri;
+        "<diklabu><server>"+$global:server+"</server></diklabu>" | Set-Content "$home\diklabu.conf"
+
     }
-    Process
-    {
-    }
-    End
-    {
-    }
+   
 }
 
 <#
@@ -63,12 +68,7 @@ function Get-Diklabuserver
     {
         return $global:server
     }
-    Process
-    {
-    }
-    End
-    {
-    }
+   
 }
 
 <#
@@ -87,15 +87,15 @@ function Login-Diklabu
     (
         # Benutzername
         [Parameter(Mandatory=$true,Position=0)]
-        $user,
+        [String]$user,
 
         # Kennwort
         [Parameter(Mandatory=$true,Position=1)]
-        $password,
+        [String]$password,
 
         # URI des Diklabu Servers
         [Parameter(Position=2)]
-        $uri=$global:server
+        [String]$uri=$global:server
 
     )
 
@@ -111,15 +111,5 @@ function Login-Diklabu
         $global:auth_token=$r.auth_token
         return $r;
     }
-    Process
-    {
-    }
-    End
-    {
-    }
 }
-
-#Export-ModuleMember -Function Set-Diklabuserver
-#Export-ModuleMember -Function Get-Diklabuserver
-#Export-ModuleMember -Function Login-Diklabu
 

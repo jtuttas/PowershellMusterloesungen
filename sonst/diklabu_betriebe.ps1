@@ -1,31 +1,36 @@
 ﻿<#
     VERBEN:
-        find ... findet einen oder mehrere Objekte nach Namen. '%' ist WildCard
-        get .... findet ein Objekt durch angabe des PK
-        set .... ändert Attribute eines Objektes durch angabe des PK
-        new .... erzeugt ein neuen Eintrag
-        delete . ein Objekt löschen
+        find ... findet einen oder mehrere Betriebe nach Namen. '%' ist WildCard
+        get .... findet einen Betrieb durch angabe des PK
+        set .... ändert Attribute eines Betriebes durch Angabe des PK
+        new .... erzeugt ein neuen Betrieb
+        delete . einen Betrieb löschen
+
+    NOMEN:
+        company
 #>
 
 <#
 .Synopsis
-   Sucht einen Betrieb
+   Sucht einen Betrieb nach Namen
 .DESCRIPTION
    Sucht einen Betrieb nach dessen Namen. % ist Wildcard
 .EXAMPLE
-   Find-Company -Name "xy gmbh"
+   Find-Company -NAME "xy gmbh"
+.EXAMPLE
+   "Tel%","Comp%" | Find-Company 
+
 #>
 function Find-Company
 {
     Param
     (
-        # Auth Token (nach Login)
-        [Parameter(Mandatory=$true,Position=0)]
-        $name,
+        # Name des Betriebes
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,Position=0)]
+        [String]$NAME,
 
         # Adresse des Diklabu Servers
-        $uri=$global:server
-
+        [String]$uri=$global:server
     )
 
     Begin
@@ -33,126 +38,95 @@ function Find-Company
         $headers=@{}
         $headers["content-Type"]="application/json;charset=iso-8859-1"
         $headers["auth_token"]=$global:auth_token;
-        $r=Invoke-RestMethod -Method Get -Uri ($uri+"betriebe/"+$name) -Headers $headers  
-        return $r;
     }
     Process
     {
-    }
-    End
-    {
-    }
+        try {
+          $r=Invoke-RestMethod -Method Get -Uri ($uri+"betriebe/"+$NAME) -Headers $headers  
+          return $r;
+         } catch {
+            Write-Host "Find-Company: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
+        }
+    }   
 }
 
 
 <#
 .Synopsis
-   Attribute eines Betriebes ändert 
+   Attribute eines oder mehrerer Betriebe ändern
 .DESCRIPTION
    Ändert die Attribute eines oder mehrerer Betriebe
 .EXAMPLE
-   Set-Company -id 1234 -Name "xy gmbh"
+   Set-Company -ID 1234 -Name "xy gmbh"
 .EXAMPLE
-   Set-Company -id 1234 -Name "xy gmbh" -plz 16122 -ort Hannover
+   Set-Company -ID 1234 -Name "xy gmbh" -PLZ 16122 -ORT Hannover
+.EXAMPLE
+   1234,5678| Set-Company -ORT Hannover
+.EXAMPLE
+   Find-Company -NAME "Tel%"| Set-Company -ORT Hannover
+.DESCRIPTION
+   Alle Betriebe die mit "Tel" anfangen wird der Ort auf Hannover gesetzt
+
 #>
 function Set-Company
 {
     Param
     (
-        # Auth Token (nach Login)
-        [Parameter(Mandatory=$true,Position=0)]
-        $id,
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
+        [int]$ID,
 
         # Adresse des Diklabu Servers
-        $uri=$global:server,
+        [String]$uri=$global:server,
 
         #Name des Betriebes
-        $name,
+        [String]$NAME,
         #PLZ des Betriebes
-        $plz,
+        [String]$PLZ,
         #Ort des Betriebes
-        $ort,
+        [String]$ORT,
         #Straße des Betriebes
-        $strasse,
+        [String]$STRASSE,
         #Hausnummer des Betriebes
-        $nr
-
+        [String]$NR
     )
 
     Begin
     {
-        $betrieb=echo "" | Select-Object -Property "NAME","PLZ","ORT","STRASSE","NR"
-        $betrieb.NAME=$name
-        $betrieb.PLZ=$plz
-        $betrieb.ORT=$ort
-        $betrieb.STRASSE=$strasse
-        $betrieb.NR=$nr
         $headers=@{}
         $headers["content-Type"]="application/json;charset=iso-8859-1"
         $headers["auth_token"]=$global:auth_token;
-        $r=Invoke-RestMethod -Method Post -Uri ($uri+"betriebe/id/"+$id) -Headers $headers -Body (ConvertTo-Json $betrieb)
-        return $r;
     }
     Process
     {
-    }
-    End
-    {
-    }
-}
-
-<#
-.Synopsis
-   Einen Betrieb löschen
-.DESCRIPTION
-   Löscht einen Betrieb in der Tabelle BETRIEBE 
-.EXAMPLE
-   Delete-Company -id 1234
-.EXAMPLE
-   Delete-Company -id 1234 -uri http://localhost:8080/Diklabu/api/v1/
-.EXAMPLE
-   1234,5678 | Delete-Company 
-
-#>
-function Delete-Company
-{
-    Param
-    (
-        # Auth Token (nach Login)
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,Position=0)]
-        $id,
-
-        # Adresse des Diklabu Servers
-        $uri=$global:server
-    )
-
-    Begin
-    {
-    }
-    Process
-    {
-        foreach ($i in $id) {
-            $headers=@{}
-            $headers["content-Type"]="application/json;charset=iso-8859-1"
-            $headers["auth_token"]=$global:auth_token;
-            $r=Invoke-RestMethod -Method Delete -Uri ($uri+"betriebe/"+$i) -Headers $headers 
-            return $r;
+        $betrieb=echo "" | Select-Object -Property "NAME","PLZ","ORT","STRASSE","NR"
+        $betrieb.NAME=$NAME
+        $betrieb.PLZ=$PLZ
+        $betrieb.ORT=$ORT
+        $betrieb.STRASSE=$STRASSE
+        $betrieb.NR=$NR
+        try {
+          $r=Invoke-RestMethod -Method Post -Uri ($uri+"betriebe/admin/id/"+$ID) -Headers $headers -Body (ConvertTo-Json $betrieb)
+          return $r;
+         } catch {
+            Write-Host "Set-Company: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
         }
+
     }
     End
     {
     }
 }
 
+
 <#
 .Synopsis
-   Einen Betrieb abfragen
+   Einen odere mehrere Betriebe abfragen
 .DESCRIPTION
-   FRagt einen Betrieb über seine ID ab
+   Fragt einen oder mehrere Betriebe über ID ab
 .EXAMPLE
-   Get-Company -id 1234
+   Get-Company -ID 1234
 .EXAMPLE
-   Get-Company -id 1234 -uri http://localhost:8080/Diklabu/api/v1/
+   Get-Company -ID 1234 -uri http://localhost:8080/Diklabu/api/v1/
 .EXAMPLE
    1234,5678 | Get-Company 
 
@@ -161,82 +135,138 @@ function Get-Company
 {
     Param
     (
-        # Auth Token (nach Login)
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,Position=0)]
-        $id,
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
+        [int]$ID,
 
         # Adresse des Diklabu Servers
-        $uri=$global:server
+        [String]$uri=$global:server
     )
 
     Begin
     {
+          $headers=@{}
+          $headers["content-Type"]="application/json;charset=iso-8859-1"
+          $headers["auth_token"]=$global:auth_token;
     }
     Process
     {
-        foreach ($i in $id) {
-            $headers=@{}
-            $headers["content-Type"]="application/json;charset=iso-8859-1"
-            $headers["auth_token"]=$global:auth_token;
-            $r=Invoke-RestMethod -Method Get -Uri ($uri+"betriebe/id/"+$i) -Headers $headers 
+        try {
+            $r=Invoke-RestMethod -Method Get -Uri ($uri+"betriebe/id/"+$ID) -Headers $headers 
             return $r;
+        } catch {
+            Write-Host "Get-Company: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
         }
-    }
-    End
-    {
     }
 }
 
 <#
 .Synopsis
-   Einen neuen Betrieb anlegen
+   Einen neuen oder mehrere neu Betrieb(e) anlegen
 .DESCRIPTION
-   Erzeugt einen Neuen Betrieb
+   Erzeugt einen Neuen Betrieb. Bzw. importiert die Betriebe aus einer CSV Datei mit folgenden Einträgen
+   "NAME","ORT","PLZ","STRASSE"
+   "MMBBS GmbH","Hannover","30539","Exoplaza 3"
+   "MMBBS AG","Hannover","30539","Exoplaza 4"
 .EXAMPLE
-   New-Company -Name "xy gmbh"
+   New-Company -NAME "xy gmbh"
 .EXAMPLE
-   New-Company -Name "xy gmbh" -plz 16122 -ort Hannover
+   New-Company -NAME "xy gmbh" -plz 16122 -ort Hannover
+.EXAMPLE
+   Import-Csv betriebe.csv | New-Company 
+
 #>
 function New-Company
 {
     Param
     (
+        [Parameter(ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
+        $betrieb,
         # Name des Betriebes
-        [Parameter(Mandatory=$true,Position=0)]
-        $name,
+        [Parameter(Mandatory=$true,Position=0,ValueFromPipelineByPropertyName=$true)]
+        [String]$NAME,
 
         # Adresse des Diklabu Servers
-        $uri=$global:server,
+        [String]$uri=$global:server,
 
         #PLZ des Betriebes
-        $plz,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$PLZ,
         #Ort des Betriebes
-        $ort,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$ORT,
         #Straße des Betriebes
-        $strasse,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$STRASSE,
         #Hausnummer des Betriebes
-        $nr
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$NR
 
     )
 
     Begin
     {
-        $betrieb=echo "" | Select-Object -Property "NAME","PLZ","ORT","STRASSE","NR"
-        $betrieb.NAME=$name
-        $betrieb.PLZ=$plz
-        $betrieb.ORT=$ort
-        $betrieb.STRASSE=$strasse
-        $betrieb.NR=$nr
         $headers=@{}
         $headers["content-Type"]="application/json;charset=iso-8859-1"
         $headers["auth_token"]=$global:auth_token;
-        $r=Invoke-RestMethod -Method Post -Uri ($uri+"betriebe/"+$id) -Headers $headers -Body (ConvertTo-Json $betrieb)
-        return $r;
     }
     Process
     {
+        $betrieb=echo "" | Select-Object -Property "NAME","PLZ","ORT","STRASSE","NR"
+        $betrieb.NAME=$NAME
+        $betrieb.PLZ=$PLZ
+        $betrieb.ORT=$ORT
+        $betrieb.STRASSE=$STRASSE
+        $betrieb.NR=$NAME
+        try {
+          $r=Invoke-RestMethod -Method Post -Uri ($uri+"betriebe/admin/"+$ID) -Headers $headers -Body (ConvertTo-Json $betrieb)
+          return $r;
+        } catch {
+            Write-Host "New-Company: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
+        }
     }
-    End
+   
+}
+<#
+.Synopsis
+   Einen oder mehrere Betrieb(e) löschen
+.DESCRIPTION
+   Löscht einen oder mehrere Betriebe in der Tabelle BETRIEBE 
+.EXAMPLE
+   Delete-Company -ID 1234
+.EXAMPLE
+   Delete-Company -ID 1234 -uri http://localhost:8080/Diklabu/api/v1/
+.EXAMPLE
+   1234,5678 | Delete-Company 
+.EXAMPLE
+   find-company -NAME "Tel%" | Delete-Company 
+.DESCRIPTION
+   Löscht alle Betriebe die mit "Tel" anfangen
+
+#>
+function Delete-Company
+{
+    Param
+    (
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
+        [int]$ID,
+
+        # Adresse des Diklabu Servers
+        [String]$uri=$global:server
+    )
+
+    Begin
     {
+            $headers=@{}
+            $headers["content-Type"]="application/json;charset=iso-8859-1"
+            $headers["auth_token"]=$global:auth_token;
+    }
+    Process
+    {
+        try {
+          $r=Invoke-RestMethod -Method Delete -Uri ($uri+"betriebe/admin/"+$ID) -Headers $headers 
+          return $r;
+          } catch {
+            Write-Host "Delete-Company: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
+        }
     }
 }

@@ -1,297 +1,359 @@
 ﻿<#
     VERBEN:
-        find ... findet einen oder mehrere Objekte nach Namen. '%' ist WildCard
-        get .... findet ein Objekt durch angabe des PK
-        set .... ändert Attribute eines Objektes durch angabe des PK
-        new .... erzeugt ein neuen Eintrag
-        delete . ein Objekt löschen
+        find ... findet einen oder mehrere Schüler nach Namen und Geburtsdatum. '%' ist WildCard
+        get .... findet einen  Schüler durch Angabe des PK (Schueler ID)
+        set .... ändert Attribute eines Schülers durch angabe des PK
+        new .... erzeugt ein neuen Schüler Eintrag
+        delete . löscht einen Schüler
+
+    NOMEN:
+        pupil
 #>
 <#
 .Synopsis
    Informationen zu einem Schüler abfragen
 .DESCRIPTION
-   Informationen zu einem Schüler abfragen
+   Informationen zu einem Schüler abfragen. Die Schülerdaten können dabei aus einer CSV Datei kommen mit folgenden Einträge
+        "GEBDAT","NNAME","VNAME"
+        "1968-04-11","Tuttas","Jörg"
 .EXAMPLE
-   Find-Pupil -vname Joerg -nname Tuttas -geb 1968-04-11
+   Find-Pupil -VNAME Joerg -NNAME Tuttas -GEBDAT 1968-04-11
 .EXAMPLE
-   Find-Pupil -vname Joerg -nname Tuttas -geb 1968-04-11 -uri http://localhost:8080/Diklabu/api/v1/
+   Find-Pupil -VNAME Joerg -NNAME Tuttas -GEBDAT 1968-04-11 -uri http://localhost:8080/Diklabu/api/v1/
+.EXAMPLE
+   Find-Pupil -VNAME % -NNAME % -GEBDAT 1968-04-11 
+.DESCRIPTION
+   Findet alle Schüler, die an dem Tag Geburtstag haben
+.EXAMPLE
+   Import-Csv schueler.csv | Find-Pupil 
+
 #>
 function Find-Pupil
 {
     Param
-    (       
-
+    (    
+        # Objekt des Schülers
+        [Parameter(ValueFromPipeline=$true)]
+        $schueler,   
         # Vorname des Schülers
-        [Parameter(Mandatory=$true,Position=0)]
-        $vname,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
+        [String]$VNAME,
 
         # Nachname des Schülers
-        [Parameter(Mandatory=$true,Position=1)]
-        $nname,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,Position=1)]
+        [String]$NNAME,
 
         # Geburtsdatum im SQL Format yyyy-mm-dd
-        [Parameter(Mandatory=$true,Position=2)]
-        $geb,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,Position=2)]
+        [String]$GEBDAT,
 
         # Adresse des Diklabu Servers
-        [Parameter(Position=4)]
-        $uri=$global:server
+        [String]$uri=$global:server
 
     )
 
     Begin
     {
-        $data=echo "" | Select-Object -Property "gebDatum","name","vorName"
-        $data.gebDatum=$geb
-        $data.name=$nname
-        $data.vorName=$vname
         $headers=@{}
+        $headers["content-Type"]="application/json;charset=iso-8859-1"
         $headers["auth_token"]=$global:auth_token;
-        $r=Invoke-RestMethod -Method Post -Uri ($uri+"schueler/info") -Headers $headers -Body (ConvertTo-Json $data)  -ContentType "application/json; charset=iso-8859-1"     
-        return $r;
     }
     Process
     {
-    }
-    End
-    {
+        $schueler=echo "" | Select-Object -Property "GEBDAT","NNAME","VNAME"
+        $schueler.GEBDAT=$GEBDAT
+        $schueler.NNAME=$NNAME
+        $schueler.VNAME=$VNAME
+        try {
+            $r=Invoke-RestMethod -Method Post -Uri ($uri+"schueler/info") -Headers $headers -Body (ConvertTo-Json $schueler)  -ContentType "application/json; charset=iso-8859-1"             
+            return $r;
+        } catch {
+            Write-Host "Find-Pupil: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
+        }
     }
 }
 
 <#
 .Synopsis
-   Einem Schüler abfragen
+   Einen oder mehrere Schüler abfragen und dateilierte Informationen ausgeben
 .DESCRIPTION
-   Einem Schüler abfragen
+   Fragt einen oder mehrere Schüler ab und gibt detailierte Informationen, wie Klassenzugehörigkeit Ausbilder und Ausbildungsbetrieb aus. 
 .EXAMPLE
    Get-Pupil -id 1234
 .EXAMPLE
    Get-Pupil -id 1234 -uri http://localhost:8080/Diklabu/api/v1/
 .EXAMPLE
    1234,5678 | Get-Pupil 
-
+.EXAMPLE
+   Find-Pupil -VNAME % -NNAME % -GEBDAT 1993-12-30 | Get-Pupil 
+.DESCRIPTION
+   Zeit Schülerdaten an der Schüler, die an dem Tag geburtstag habenb
+.EXAMPLE
+   Find-Coursemember -KNAME FISI13A | Get-Pupil 
+.DESCRIPTION
+   Zeit Schülerdaten der Klasse Fisi13A an
 #>
 function Get-Pupil
 {
     Param
     (       
         # ID des Schülers
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,Position=0)]
-        $id,
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
+        [int]$id,
 
         # Adresse des Diklabu Servers
-        $uri=$global:server
-
+        [String]$uri=$global:server
     )
-
     Begin
     {
+        $headers=@{}
+        $headers["content-Type"]="application/json;charset=iso-8859-1"
+        $headers["auth_token"]=$global:auth_token;
     }
     Process
     {
-        foreach ($i in $id) {
-            $headers=@{}
-            $headers["auth_token"]=$global:auth_token;
-            $r=Invoke-RestMethod -Method Get -Uri ($uri+"schueler/"+$i) -Headers $headers -ContentType "application/json; charset=iso-8859-1"     
+        try {
+            $r=Invoke-RestMethod -Method Get -Uri ($uri+"schueler/"+$id) -Headers $headers -ContentType "application/json; charset=iso-8859-1"     
             return $r;
+        } catch {
+            Write-Host "Get-Pupil: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
         }
-
-    }
-    End
-    {
     }
 }
 
 <#
 .Synopsis
-   Einen Schüler hinzufügen
+   Einen oder mehrere Schüler hinzufügen
 .DESCRIPTION
-   Fügt einen Schüler zur Tabelle Schueler hinzu
+   Fügt einen Schüler zur Tabelle Schueler hinzu. Die Daten können dabei auch aus einer CSV Datei stammen, die folgendes Aussehen hat
+       "GEBDAT","NNAME","VNAME"
+       "1968-04-11","Tuttas","Jörg"
+       "1968-04-11","Tuttas","Joerg"
+       "1968-04-12","Tuttas","Frank"
 .EXAMPLE
-   New-Pupil -vname Joerg -nname Tuttas -geb 1968-04-11
+   New-Pupil -VNAME Joerg -NNAME Tuttas -GEBDAT 1968-04-11
 .EXAMPLE
-   New-Pupil -vname Joerg -nname Tuttas -geb 1968-04-11 -uri http://localhost:8080/Diklabu/api/v1/
+   New-Pupil -VNAME Joerg -NNAME Tuttas -GEBDAT 1968-04-11 -uri http://localhost:8080/Diklabu/api/v1/
 .EXAMPLE
-   New-Pupil -vname Jörg -nname Tuttas -geb 1968-04-11 -email jtuttas@gmx.net -uri http://localhost:8080/Diklabu/api/v1/
+   New-Pupil -VNAME Jörg -NNAME Tuttas -GEBDAT 1968-04-11 -EMAIL jtuttas@gmx.net -uri http://localhost:8080/Diklabu/api/v1/
 .EXAMPLE
-   New-Pupil -vname Joerg -nname Tuttas -geb 1968-04-11 -uri http://localhost:8080/Diklabu/api/v1/ -idausbilder=4711
+   New-Pupil -VNAME Joerg -NNAME Tuttas -GEBDAT 1968-04-11 -uri http://localhost:8080/Diklabu/api/v1/ -ID_AUSBILDER=4711
 #>
 function New-Pupil
 {
     Param
     (
+        # Schülerobjekt
+        [Parameter(ValueFromPipeline=$true)]
+        $schueler,
         # Vorname des Schülers
-        [Parameter(Mandatory=$true,Position=0)]
-        $vname,
+        [Parameter(Mandatory=$true,Position=0,ValueFromPipelineByPropertyName=$true)]
+        [String]$VNAME,
 
         # Nachname des Schülers
-        [Parameter(Mandatory=$true,Position=1)]
-        $nname,
+        [Parameter(Mandatory=$true,Position=1,ValueFromPipelineByPropertyName=$true)]
+        [String]$NNAME,
 
         # Geburtsdatum im SQL Format yyyy-mm-dd
-        [Parameter(Mandatory=$true,Position=2)]
-        $geb,
+        [Parameter(Mandatory=$true,Position=2,ValueFromPipelineByPropertyName=$true)]
+        [String]$GEBDAT,
 
         # Adresse des Diklabu Servers
-        $uri=$global:server,
+        [String]$uri=$global:server,
 
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
         # EMail Adresse des Schülers
-        $email,
+        [String]$EMAIL,
 
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
         # ID Des Ausbilders
-        $idausbilder,
+        [int]$ID_AUSBILDER,
 
         # Abgang
-        $abgang="N",
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$ABGANG="N",
 
         # Info
-        $info
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$INFO
 
     )
 
     Begin
     {
-        $schueler=echo "" | Select-Object -Property "EMAIL","GEBDAT","VNAME","NNAME","ID_AUSBILDER","ABGANG","INFO"
-        $schueler.VNAME=$vname
-        $schueler.NNAME=$nname
-        $schueler.GEBDAT=$geb
-        $schueler.EMAIL=$email
-        $schueler.ID_AUSBILDER=$idausbilder
-        $schueler.ABGANG=$abgang
-        $schueler.INFO=$info
         $headers=@{}
         $headers["content-Type"]="application/json;charset=iso-8859-1"
         $headers["auth_token"]=$global:auth_token;
-        $r=Invoke-RestMethod -Method Post -Uri ($uri+"schueler") -Headers $headers -Body (ConvertTo-Json $schueler)
-        return $r;
     }
     Process
     {
-    }
-    End
-    {
+        $schueler=echo "" | Select-Object -Property "EMAIL","GEBDAT","VNAME","NNAME","ID_AUSBILDER","ABGANG","INFO"
+        $schueler.VNAME=$VNAME
+        $schueler.NNAME=$NNAME
+        $schueler.GEBDAT=$GEBDAT
+        $schueler.EMAIL=$EMAIL
+        $schueler.ID_AUSBILDER=$ID_AUSBILDER
+        $schueler.ABGANG=$ABGANG
+        $schueler.INFO=$INFO
+        try {
+            $r=Invoke-RestMethod -Method Post -Uri ($uri+"schueler/admin") -Headers $headers -Body (ConvertTo-Json $schueler)
+            return $r;
+        } catch {
+            Write-Host "New-Pupil: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
+        }
     }
 }
 
 <#
 .Synopsis
-   Attribute eines Schülers ändern
+   Attribute eines oder mehrerer Schüler ändern
 .DESCRIPTION
-   Ändert Attribute eines Schülers
+   Ändert Attribute eines oder mehrerer Schüler
 .EXAMPLE
-   Set-Pupil -id 1234 -vname Joerg -nname Tuttas -geb 1968-04-11
+   Set-Pupil -id 1234 -VNAME Joerg -NNAME Tuttas -GEBDAT 1968-04-11
 .EXAMPLE
-   Set-Pupil -id 1234 -vname Joerg -nname Tuttas -geb 1968-04-11 -uri http://localhost:8080/Diklabu/api/v1/
+   Set-Pupil -id 1234 -VNAME Joerg -NNAME Tuttas -GEBDAT 1968-04-11 -uri http://localhost:8080/Diklabu/api/v1/
 .EXAMPLE
-   Set-Pupil -id 1234 -vname Jörg -nname Tuttas -geb 1968-04-11 -email jtuttas@gmx.net -uri http://localhost:8080/Diklabu/api/v1/
+   Set-Pupil -id 1234 -VNAME Jörg -NNAME Tuttas -GEBDAT 1968-04-11 -EMAIL jtuttas@gmx.net -uri http://localhost:8080/Diklabu/api/v1/
 .EXAMPLE
-   Set-Pupil -id 1234 -vname Joerg -nname Tuttas -geb 1968-04-11 -uri http://localhost:8080/Diklabu/api/v1/ -idausbilder=4711
+   Set-Pupil -id 1234 -VNAME Joerg -NNAME Tuttas -GEBDAT 1968-04-11 -uri http://localhost:8080/Diklabu/api/v1/ -ID_AUSBILDER=4711
 .EXAMPLE
-   1234,5678 | Set-Pupil -abgang "J"
-
+   1234,5678 | Set-Pupil -ABGANG "J"
+.EXAMPLE
+   Find-Pupil -VNAME % -NNAME % -GEBDAT 1993-12-30 | Set-Pupil -INFO "Im Dezember Geburtstag"
+.DESCRIPTION
+   Alle Schüler die am 30.12.1993 Geburtstag haben, wird die Bemerkung "Im Dezember Geburtstag" zugewiesen
+.EXAMPLE
+   Find-Coursemember FISI13B | Set-Pupil -ABGANG "J"
+.DESCRIPTION
+   Alle Schüler der Klasse FISI13B erhalten das Attribut ABGANG=J
 #>
 function Set-Pupil
 {
     Param
     (
+        # Schülerobjekt
+        [Parameter(ValueFromPipeline=$true)]
+        $schueler,
         # ID des Schülers
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,Position=0)]
-        $id,
+        [Parameter(Mandatory=$true,Position=0,ValueFromPipelineByPropertyName=$true)]
+        [int]$id,
 
         # Vorname des Schülers
-        $vname,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$VNAME,
 
         # Nachname des Schülers
-        $nname,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$NNAME,
 
         # Geburtsdatum im SQL Format yyyy-mm-dd
-        $geb,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$GEBDAT,
 
         # Adresse des Diklabu Servers
-        $uri=$global:server,
+        [String]$uri=$global:server,
 
         # EMail Adresse des Schülers
-        $email,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$EMAIL,
 
         # ID Des Ausbilders
-        $idausbilder,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [int]$ID_AUSBILDER,
 
         # Abgang
-        $abgang,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$ABGANG,
 
         # Info
-        $info
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$INFO
 
     )
 
     Begin
     {
+        $headers=@{}
+        $headers["content-Type"]="application/json;charset=iso-8859-1"
+        $headers["auth_token"]=$global:auth_token;
         
     }
     Process
     {
-        foreach ($i in $id) {
-            $schueler=echo "" | Select-Object -Property "EMAIL","GEBDAT","VNAME","NNAME","ID_AUSBILDER","ABGANG","INFO"
-            $schueler.VNAME=$vname
-            $schueler.NNAME=$nname
-            $schueler.GEBDAT=$geb
-            $schueler.EMAIL=$email
-            $schueler.ID_AUSBILDER=$idausbilder
-            $schueler.ABGANG=$abgang
-            $schueler.INFO=$info
-            $headers=@{}
-            $headers["content-Type"]="application/json;charset=iso-8859-1"
-            $headers["auth_token"]=$global:auth_token;
-            $r=Invoke-RestMethod -Method Post -Uri ($uri+"schueler/"+$i) -Headers $headers -Body (ConvertTo-Json $schueler)
+        $schueler=echo "" | Select-Object -Property "EMAIL","GEBDAT","VNAME","NNAME","ID_AUSBILDER","ABGANG","INFO"
+        $schueler.VNAME=$VNAME
+        $schueler.NNAME=$NNAME
+        $schueler.GEBDAT=$GEBDAT
+        $schueler.EMAIL=$EMAIL
+        $schueler.ID_AUSBILDER=$ID_AUSBILDER
+        $schueler.ABGANG=$ABGANG
+        $schueler.INFO=$INFO
+        try {
+            $r=Invoke-RestMethod -Method Post -Uri ($uri+"schueler/admin/"+$id) -Headers $headers -Body (ConvertTo-Json $schueler)
             return $r;
+        } catch {
+            Write-Host "Set-Pupil: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
         }
-    }
-    End
-    {
-    }
+    }    
 }
 
 
 <#
 .Synopsis
-   Einen Schüler löschen
+   Einen oder mehrere Schüler löschen
 .DESCRIPTION
-   Entfernt einen Schüler aus der Tabelle Schüler, sofern er nicht noch in Klassenb zugeordnet ist
+   Entfernt einen oder mehrere Schüler aus der Tabelle Schüler, sofern er/sie nocht nicht einer Klasse zugerodnet ist
 .EXAMPLE
    Delete-Pupil -id 1234 
 .EXAMPLE
    Delete-Pupil -id 1234 -uri http://localhost:8080/Diklabu/api/v1/
 .EXAMPLE
    1234,5678 | Delete-Pupil 
-
+.EXAMPLE
+   Find-Pupil -VNAME % -NNAME % -GEBDAT 1968-04-11 | Delete-Pupil 
+.DESCRIPTION
+   Löscht alle Schüler, die am 11.4.1968 geboren sind
+.EXAMPLE
+   Import-Csv schueler.csv | Find-Pupil | Delete-Pupil 
+.DESCRIPTION
+   Löscht alle Schüler, die in der CSV Datei sich befinden, die CSV Datei hat dabei folgendes Format
+    "GEBDAT","NNAME","VNAME"
+    "1968-04-11","Tuttas","Jörg"
+    "1968-04-11","Tuttas","Joerg"
+    "1968-04-12","Tuttas","Frank"
 #>
 function Delete-Pupil
 {
     Param
     (
+        # Schülerobjekt
+        [Parameter(ValueFromPipeline=$true)]
+        $schueler,
         # ID des Schülers
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,Position=0)]
-        $id,
+        [Parameter(Mandatory=$true,Position=0,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
+        [int]$id,
 
         # Adresse des Diklabu Servers
-        $uri=$global:server
+        [String]$uri=$global:server
     )
 
     Begin
     {
+        $headers=@{}
+        $headers["content-Type"]="application/json;charset=iso-8859-1"
+        $headers["auth_token"]=$global:auth_token;
         
     }
     Process
     {
-        foreach ($i in $id) {
-            $headers=@{}
-            $headers["content-Type"]="application/json;charset=iso-8859-1"
-            $headers["auth_token"]=$global:auth_token;
-            $r=Invoke-RestMethod -Method Delete -Uri ($uri+"schueler/"+$i) -Headers $headers 
+        try {
+            $r=Invoke-RestMethod -Method Delete -Uri ($uri+"schueler/admin/"+$id) -Headers $headers 
             return $r;
+        } catch {
+            Write-Host "Delete-Pupil: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
         }
     }
-    End
-    {
-    }
 }
+
+

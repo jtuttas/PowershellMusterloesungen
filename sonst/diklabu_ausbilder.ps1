@@ -12,36 +12,40 @@
 .DESCRIPTION
    Liefert eine Liste von passenden Ausbilder Objekten zurück
 .EXAMPLE
-   Find-Instructor -name "%Meyer"
+   Find-Instructor -NNAME "%Meyer"
 .EXAMPLE
-   Find-Instructor -name "%Meyer" -uri http://localhost:8080/Diklabu/api/v1/
+   Find-Instructor -NNAME "%Meyer" -uri http://localhost:8080/Diklabu/api/v1/
 .EXAMPLE
    "%Schmidt","%Meyer" | Find-Instructor
+
 #>
 function Find-Instructor
 {
     Param
     (
+       
         # Name des Ausbilders
         [Parameter(Mandatory=$true,ValueFromPipeline=$true,Position=0)]
-        $name,
+        [String]$NNAME,
 
         # Adresse des Diklabu Servers
-        $uri=$global:server
+        [String]$uri=$global:server
 
     )
 
     Begin
     {
+        $headers=@{}
+        $headers["content-Type"]="application/json;charset=iso-8859-1"
+        $headers["auth_token"]=$global:auth_token;
     }
     Process
     {
-        foreach ($n in $name) {
-            $headers=@{}
-            $headers["content-Type"]="application/json;charset=iso-8859-1"
-            $headers["auth_token"]=$global:auth_token;
-            $r=Invoke-RestMethod -Method Get -Uri ($uri+"ausbilder/find/"+$n) -Headers $headers  
+        try {
+            $r=Invoke-RestMethod -Method Get -Uri ($uri+"ausbilder/find/"+$NNAME) -Headers $headers  
             return $r;
+         } catch {
+            Write-Host "Find-Instructor: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
         }
 
     }
@@ -56,9 +60,9 @@ function Find-Instructor
 .DESCRIPTION
    Liefert den Ausbilder zur id zurück
 .EXAMPLE
-   Get-Instructor -ausbilderId 1234
+   Get-Instructor -ID 1234
 .EXAMPLE
-   Get-Instructor -ausbilderId 1234 -uri http://localhost:8080/Diklabu/api/v1/
+   Get-Instructor -ID 1234 -uri http://localhost:8080/Diklabu/api/v1/
 .EXAMPLE
    1234,5678 | Get-Instructor
 #>
@@ -67,198 +71,222 @@ function Get-Instructor
     Param
     (
         # ID des Ausbilders
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true,Position=0)]
-        $ausbilderId,
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
+        [int]$ID,
 
         # Adresse des Diklabu Servers
-        $uri=$global:server
+        [String]$uri=$global:server
 
     )
 
     Begin
     {
+        $headers=@{}
+        $headers["content-Type"]="application/json;charset=iso-8859-1"
+        $headers["auth_token"]=$global:auth_token;
     }
     Process
     {
-        foreach ($id in $ausbilderId) {
-            $headers=@{}
-            $headers["content-Type"]="application/json;charset=iso-8859-1"
-            $headers["auth_token"]=$global:auth_token;
-            $r=Invoke-RestMethod -Method Get -Uri ($uri+"ausbilder/"+$id) -Headers $headers  
+        try {
+            $r=Invoke-RestMethod -Method Get -Uri ($uri+"ausbilder/"+$ID) -Headers $headers  
             return $r;
+        } catch {
+            Write-Host "Get-Instructor: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
         }
-
     }
-    End
-    {
-    }
+   
 }
 
 
 <#
 .Synopsis
-   Attribute eines Ausbilders ändern
+   Attribute eines Ausbilders oder mehrerer Ausbilder ändern
 .DESCRIPTION
-   Ändert diverse Attribute eines Ausbilders
+   Ändert diverse Attribute eines Ausbilders. Der Asubilder wird dabei über seine ID ausgewählt
 .EXAMPLE
-   Set-Instructor -ausbilderId 123 -Name "Herr Schmidt"
+   Set-Instructor -ID 123 -NNAME "Herr Schmidt"
 .EXAMPLE
-   Set-Instructor -ausbilderId 123 -tel 110 -fax 112
+   Set-Instructor -ID 123 -FAX 110 -TELEFON 112
 .EXAMPLE
-  1234,4567|Set-Instructor -tel 110 -fax 112
+  1234,4567|Set-Instructor -TELEFON 110 -FAX 112
+.EXAMPLE
+  Find-Instructor -NNAME "Herr Schmidt" |Set-Instructor -TELEFON 110 -FAX 112
+.DESCRIPTION
+  Weist allen Ausbildern "Herr Schmidt" die angegebene Televon und FAX Nummer zu
+
 #>
 function Set-Instructor
 {
     Param
     (
-        # Id des Ausbilders
-        [Parameter(Mandatory=$true,ValueFromPipeline,Position=0)]
-        $ausbilderId,
+       # ID des Ausbilders
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true,Position=0)]
+        [int]$ID,
 
         # Adresse des Diklabu Servers
-        $uri=$global:server,
+        [String]$uri=$global:server,
 
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
         #Name
-        $name,
-
+        [String]$NNAME,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
         #Anrede des Ausbilders
-        $anrede,
+        [String]$ANREDE,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
         # EMAIL des Ausbilders
-        $email,
+        [String]$EMAIL,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
         #FAX Nummer des Asubilders
-        $fax,
+        [String]$FAX,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
         #Tel Nummer des Asubilders
-        $tel,
+        [String]$TELEFON,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
         #ID_Betrieb des Ausbilders
-        $id_betrieb
+        [int]$ID_BETRIEB
 
     )
 
     Begin
     {
-        
+        $headers=@{}
+        $headers["content-Type"]="application/json;charset=iso-8859-1"
+        $headers["auth_token"]=$global:auth_token;        
     }
     Process
     {
-        foreach ($id in $ausbilderId) {
-            $ausbilder=echo "" | Select-Object -Property "NNAME","ANREDE","EMAIL","FAX","ID_BETRIEB","TELEFON"
-            $ausbilder.ANREDE=$anrede
-            $ausbilder.EMAIL=$email
-            $ausbilder.FAX=$fax
-            $ausbilder.ID_BETRIEB=$id_betrieb
-            $ausbilder.TELEFON=$tel
-            $ausbilder.NNAME=$name       
-        
-            $headers=@{}
-            $headers["content-Type"]="application/json;charset=iso-8859-1"
-            $headers["auth_token"]=$global:auth_token;
-            $r=Invoke-RestMethod -Method Post -Uri ($uri+"ausbilder/"+$id) -Headers $headers -Body (ConvertTo-Json $ausbilder)
+        $ausbilder=echo "" | Select-Object -Property "NNAME","ANREDE","EMAIL","FAX","ID_BETRIEB","TELEFON"
+        $ausbilder.ANREDE=$ANREDE
+        $ausbilder.EMAIL=$EMAIL
+        $ausbilder.FAX=$FAX
+        $ausbilder.ID_BETRIEB=$ID_BETRIEB
+        $ausbilder.TELEFON=$TELEFON
+        $ausbilder.NNAME=$NNAME       
+        try {         
+            $r=Invoke-RestMethod -Method Post -Uri ($uri+"ausbilder/admin/"+$ID) -Headers $headers -Body (ConvertTo-Json $ausbilder)
             return $r;
+        } catch {
+            Write-Host "Set-Instructor: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
         }
-    }
-    End
-    {
     }
 }
 
 <#
 .Synopsis
-   Legt einen neuen Ausbilder an
+   Legt einen oder mehrere neue(n) Ausbilder an
 .DESCRIPTION
-   Erzeugt einen neuen Ausbilder
+   Erzeugt einen oder mehrere neue(n) Ausbilder. Als Import kann z.B. eine CSV Datei genutzt werden mit folgenden Einträgen
+    "ANREDE","EMAIL","FAX","ID_BETRIEB","NNAME","TELEFON"
+    "Herr","tuttas@mmbbs.de","05161/ 98 20 20","4084","Herr Tuttas","05161/ 98 20 12"
+    "Herr","tuttas@mmbbs.de","05161/ 98 20 20","4084","Herr Dr. Tuttas","05161/ 98 20 12"
 .EXAMPLE
-   New-Instructor -Name "Herr Schmidt"
+   New-Instructor -NNAME "Herr Schmidt"
 .EXAMPLE
-   New-Instructor -Name "Herr Meyer" -tel 110 -fax 112 -email test@test.de
+   New-Instructor -NNAME "Herr Meyer" -TELEFON 110 -FAX 112 -EMAIL test@test.de
+.EXAMPLE
+   Import-Csv ausbilder.csv | New-Instructor
 #>
 function New-Instructor
 {
     Param
-    (
+    ( 
+        # Objekt des Ausbilders
+        [Parameter(ValueFromPipeline=$true,ValueFromPipelineByPropertyName=$true)]
+        $ausbilder,
         # Name des Ausbilders
-        [Parameter(Mandatory=$true,Position=0)]
-        $name,
-
+        [Parameter(Mandatory=$true,Position=0,ValueFromPipelineByPropertyName=$true)]
+        [String]$NNAME,
+        
         # Adresse des Diklabu Servers
-        $uri=$global:server,
+        [String]$uri=$global:server,
 
         #Anrede des Ausbilders
-        $anrede,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$ANREDE,
         # EMAIL des Ausbilders
-        $email,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$EMAIL,
         #FAX Nummer des Asubilders
-        $fax,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$FAX,
         #Tel Nummer des Asubilders
-        $tel,
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [String]$TELEFON,
         #ID_Betrieb des Ausbilders
-        $id_betrieb
+        [Parameter(ValueFromPipelineByPropertyName=$true)]
+        [int]$ID_BETRIEB
 
     )
 
     Begin
     {
-            $ausbilder=echo "" | Select-Object -Property "NNAME","ANREDE","EMAIL","FAX","ID_BETRIEB","TELEFON"
-            $ausbilder.ANREDE=$anrede
-            $ausbilder.EMAIL=$email
-            $ausbilder.FAX=$fax
-            $ausbilder.ID_BETRIEB=$id_betrieb
-            $ausbilder.TELEFON=$tel
-            $ausbilder.NNAME=$name       
-        
-            $headers=@{}
-            $headers["content-Type"]="application/json;charset=iso-8859-1"
-            $headers["auth_token"]=$global:auth_token;
-            $r=Invoke-RestMethod -Method Post -Uri ($uri+"ausbilder/") -Headers $headers -Body (ConvertTo-Json $ausbilder)
-            return $r;
+          $headers=@{}
+          $headers["content-Type"]="application/json;charset=iso-8859-1"
+          $headers["auth_token"]=$global:auth_token;
         
     }
     Process
     {
-    }
-    End
-    {
+          $ausbilder=echo "" | Select-Object -Property "NNAME","ANREDE","EMAIL","FAX","ID_BETRIEB","TELEFON"
+          $ausbilder.ANREDE=$ANREDE
+          $ausbilder.EMAIL=$EMAIL
+          $ausbilder.FAX=$FAX
+          $ausbilder.ID_BETRIEB=$ID_BETRIEB
+          $ausbilder.TELEFON=$TEL
+          $ausbilder.NNAME=$NNAME      
+          try {        
+            $r=Invoke-RestMethod -Method Post -Uri ($uri+"ausbilder/admin/") -Headers $headers -Body (ConvertTo-Json $ausbilder)
+            return $r;
+          } catch {
+              Write-Host "New-Instructor: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
+          }
     }
 }
 
 <#
 .Synopsis
-   Einen Ausbilder löschen
+   Einen oder mehrere Ausbilder löschen
 .DESCRIPTION
-   Löscht einen Ausbilder
+   Löscht einen oder mehrere Ausbilder
 .EXAMPLE
-   Delete-Instructor -ausbilderId 123 
+   Delete-Instructor -ID 123 
 .EXAMPLE
-   Delete-Instructor -ausbilderId 123 -uri http://localhost:8080/Diklabu/api/v1/
+   Delete-Instructor -ID 123 -uri http://localhost:8080/Diklabu/api/v1/
 .EXAMPLE
   1234,4567|Delete-Instructor 
+.EXAMPLE
+  Find-Instruktor -NNAME "%Tuttas"|Delete-Instructor 
+.DESCRIPTION
+   Löscht alle Ausbilder die Tuttas im Namen haben
+
 #>
 function Delete-Instructor
 {
     Param
     (
-        # Id des Ausbilders
-        [Parameter(Mandatory=$true,ValueFromPipeline,Position=0)]
-        $ausbilderId,
+        # ID des Ausbilders
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ValueFromPipeline=$true,Position=0)]
+        [int]$ID,
 
         # Adresse des Diklabu Servers
-        $uri=$global:server
+        [String]$uri=$global:server
     )
 
     Begin
     {
+        $headers=@{}
+        $headers["content-Type"]="application/json;charset=iso-8859-1"
+        $headers["auth_token"]=$global:auth_token;
         
     }
     Process
     {
-        foreach ($id in $ausbilderId) {        
-            $headers=@{}
-            $headers["content-Type"]="application/json;charset=iso-8859-1"
-            $headers["auth_token"]=$global:auth_token;
-            $r=Invoke-RestMethod -Method Delete -Uri ($uri+"ausbilder/"+$id) -Headers $headers 
-            return $r;
-        }
-    }
-    End
-    {
+          try {
+              $r=Invoke-RestMethod -Method Delete -Uri ($uri+"ausbilder/admin/"+$ID) -Headers $headers 
+              return $r;
+          } catch {
+              Write-Host "Delete-Instructor: Status-Code"$_.Exception.Response.StatusCode.value__ " "$_.Exception.Response.StatusDescription -ForegroundColor red
+          }
     }
 }
+
