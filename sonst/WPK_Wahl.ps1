@@ -7,9 +7,9 @@ New-Course -KNAME "WPK_TU_2_lila" -TITEL "Ein toller WPK2"
 New-Course -KNAME "WPK_BK_1_lila" -TITEL "Ein tollerrer WPK"
 New-Course -KNAME "WPK_Ke_lila" -TITEL "Ein ganz toller WPK"
 New-Course -KNAME "WPK_We_lila" -TITEL "Spocht"
-New-Course -KNAME "WPK_Ws_lila" -TITEL "Rechnen"
-New-Course -KNAME "WPK_PK_lila" -TITEL "Malen"
-New-Course -KNAME "WPK_vb_lila" -TITEL "Tanzen"
+#New-Course -KNAME "WPK_Ws_lila" -TITEL "Rechnen"
+#New-Course -KNAME "WPK_PK_lila" -TITEL "Malen"
+#New-Course -KNAME "WPK_vb_lila" -TITEL "Tanzen"
 
 
 # Kurswahl sperren
@@ -98,7 +98,7 @@ foreach ($k in $kurse) {
     # Ermitteln der Schüler, die diesen Kurs als Drittwunsch hatten
     [object[]]$schueler = Get-Coursevoting -id $k.id -priority 3 
     $nk = Get-Coursemember $k.id | measure 
-    Write-Host "Im Kurs "$k.TITEL" sind bisher "$nk.Count" Schüler"
+    Write-Host "Drittwunsch: Im Kurs "$k.TITEL" sind bisher "$nk.Count" Schüler"
     $m=25-$nk.Count;
     if ($schueler.Count -lt $m) {
         $m=$schueler.Count
@@ -112,6 +112,26 @@ foreach ($k in $kurse) {
     }
 }
 Write-Host "Es haben sich $n Schüler an der Wahl beteiligt! Es wurden $n1 Erstwünsche berücksichtig, $n2 Zweitwünsche und $n3 Drittwünsche"
+Read-Host "Schüler anzeigen, die nicht zugeordnet werden konnten"
+$nicht=@{}
+$kurse = List-Coursevoting
+foreach ($k in $kurse) {
+    $s1=Get-Coursevoting -id $k.id -priority 1
+    $s2=Get-Coursevoting -id $k.id -priority 2
+    $s3=Get-Coursevoting -id $k.id -priority 3
+    foreach ($s in $s1) {
+    $nicht[$s.id]=$s.VNAME+" "+$s.NNAME
+    }
+    foreach ($s in $s2) {
+        $nicht[$s.id]=$s.VNAME+" "+$s.NNAME
+    }
+    foreach ($s in $s3) {
+        $nicht[$s.id]=$s.VNAME+" "+$s.NNAME
+    }
+
+}
+$nicht
+Write-Host "Für diese Schüler konnte kein Kurs gefunden werden"
 
 <#
     Aufräumen (wieder Zurück zum Anfang)

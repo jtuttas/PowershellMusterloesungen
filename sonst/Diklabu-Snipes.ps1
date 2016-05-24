@@ -21,3 +21,7 @@ Find-Coursemember -KNAME "WPK_TU_Meta" | Remove-Coursemember -klassenid $c.id
 
 # Commandlets anzeigen
 Get-Command -Module diklabu |  Get-Help | Select-Object -Property Name,Synopsis
+
+# EMail Adressen der Schüler der Klasse FISI14A  als QR Code
+"FISI14A"|find-coursemember|Get-Pupil | Select-Object -Property email,name | ForEach-Object {$n="$HOME\Desktop\"+$_.name+".jpg";$s="https://chart.googleapis.com/chart?cht=qr&chl=mailto:"+$_.email+"&chs=300x300";Start-BitsTransfer -Source $s -Destination $n}
+

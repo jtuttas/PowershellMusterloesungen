@@ -1,0 +1,8 @@
+<config>
+  <dbserver>192.168.178.27</dbserver>
+  <dbname>ls2AJ</dbname>
+  <dbuser>tuttas</dbuser>
+  <dbpassword>joerg123</dbpassword>
+  <from>192.168.178.3</from>
+  <to>192.168.178.30</to>
+</config>
