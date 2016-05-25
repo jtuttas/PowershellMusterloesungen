@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FRAME GUID="2FB25471-B62C-4EE6-BD43-F819C095ACF8" FORMAT="0000" APP_VERSION="2.2.0.8" CHECKSUM="72C80115D0F7DDD1">
+  <PROJECT FORMAT="1.00" NAME="arp" AUTHOR="Jörg" CREATED="2016.05.24 15:27:41" MODIFIED="2016.05.24 16:47:46">
+    <DIAGRAMS>
+      <DIAGRAM FORMAT="1.00" ID="0" NAME="ARP" CREATED="2016.05.24 15:27:45" MODIFIED="2016.05.24 16:47:46">
+        <LAYOUT FORMAT="1.00" COLUMNS="3" ROWS="17">
+          <ENTRIES>
+            <ENTRY COLUMN="0" ROW="3">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="16">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="0" ROW="6">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="12">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="0" ROW="9">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="42">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="0" ROW="15">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="44">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="0" ANCHOR="True">
+              <FIGURE SUBTYPE="PapTitle" FORMAT="1.00" ID="0">
+                <TEXT><![CDATA[ARP]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="1">
+              <FIGURE SUBTYPE="PapStart" FORMAT="1.00" ID="1">
+                <TEXT><![CDATA[Start]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="2">
+              <FIGURE SUBTYPE="PapInput" FORMAT="1.00" ID="4">
+                <TEXT><![CDATA[einlesen von config.xml]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="3">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="18">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="4">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="6">
+                <TEXT><![CDATA[Ping auf FROM-IP]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="5">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="8">
+                <TEXT><![CDATA[FROM-IP um 1 erhöhen (incIp)]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="6">
+              <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="10">
+                <TEXT><![CDATA[FROM-IP<TO_IP (lowerThan)]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="7">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="38">
+                <TEXT><![CDATA[Datenbankverbindung öffnen]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="8">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="21">
+                <TEXT><![CDATA[ARP Tabelle einlesen]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="9">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="47">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="10">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="23">
+                <TEXT><![CDATA[Lese n-te Zeile (MAC/IP Adresse) der ARP Tabelle ein]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="11">
+              <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="25">
+                <TEXT><![CDATA[Existiert MAC Adresse schon in der Datenbank]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="12">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="29">
+                <TEXT><![CDATA[Füge einen neuen Eintrag in die Datenbank ein]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="13">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="35">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="14">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="31">
+                <TEXT><![CDATA[n=n+1]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="15">
+              <FIGURE SUBTYPE="PapCondition" FORMAT="1.00" ID="40">
+                <TEXT><![CDATA[n=Anzahl von Zeilen in der ARP Tabelle]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="1" ROW="16">
+              <FIGURE SUBTYPE="PapEnd" FORMAT="1.00" ID="2">
+                <TEXT><![CDATA[Ende]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="11">
+              <FIGURE SUBTYPE="PapActivity" FORMAT="1.00" ID="27">
+                <TEXT><![CDATA[Aktualisiere die Daten in der Datenbank für die MAC Adresse]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+            <ENTRY COLUMN="2" ROW="13">
+              <FIGURE SUBTYPE="PapConnector" FORMAT="1.00" ID="33">
+                <TEXT><![CDATA[]]></TEXT>
+              </FIGURE>
+            </ENTRY>
+          </ENTRIES>
+        </LAYOUT>
+        <CONNECTIONS>
+          <CONNECTION FORMAT="1.00" ID="3" FROM="1" TO="4" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="19" FROM="18" TO="6" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="7" FROM="6" TO="8" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="9" FROM="8" TO="10" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="11" FROM="10" TO="38" TEXT="nein" />
+          <CONNECTION FORMAT="1.00" ID="13" FROM="10" TO="12" TEXT="ja" />
+          <CONNECTION FORMAT="1.00" ID="5" FROM="4" TO="18" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="15" FROM="12" TO="16" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="20" FROM="16" TO="18" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="48" FROM="47" TO="23" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="24" FROM="23" TO="25" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="26" FROM="25" TO="29" TEXT="nein" />
+          <CONNECTION FORMAT="1.00" ID="28" FROM="25" TO="27" TEXT="ja" />
+          <CONNECTION FORMAT="1.00" ID="36" FROM="35" TO="31" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="32" FROM="31" TO="40" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="34" FROM="27" TO="33" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="30" FROM="29" TO="35" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="37" FROM="33" TO="35" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="39" FROM="38" TO="21" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="41" FROM="40" TO="2" TEXT="ja" />
+          <CONNECTION FORMAT="1.00" ID="45" FROM="40" TO="44" TEXT="nein" />
+          <CONNECTION FORMAT="1.00" ID="46" FROM="44" TO="42" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="22" FROM="21" TO="47" TEXT="" />
+          <CONNECTION FORMAT="1.00" ID="49" FROM="42" TO="47" TEXT="" />
+        </CONNECTIONS>
+      </DIAGRAM>
+    </DIAGRAMS>
+  </PROJECT>
+</FRAME>
