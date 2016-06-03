@@ -1,10 +1,11 @@
-﻿<#
+﻿
+
+<#
 .Synopsis
    Anlegen von AD Benutzern 
 .DESCRIPTION
    Dieses Script legt Benutzer in einer AD an, als Datenquelle dient eine CSV Datei mit folgenden Einträgen
    Homedrive,Homedirectory,Path,Firstname,Lastname,Password
-
 .EXAMPLE
    Add-ADUsers -tablename users.csv
 .EXAMPLE

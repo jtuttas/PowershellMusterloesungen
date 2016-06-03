@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 2.0
+.VERSION 2.1
 
 .GUID 84d83480-bdb8-4a46-bcb9-4831e57523f7
 
@@ -46,8 +46,7 @@
 .EXAMPLE
    Add-ADUsers -tablename users.csv -computername 192.168.12.132
 #>
-function add-ADUsers
-{
+
     Param
     (
         # Name (Pfad) der CSV-Datei
@@ -108,7 +107,8 @@ function add-ADUsers
     End
     {
     }
-}
+
+
 
 
 
